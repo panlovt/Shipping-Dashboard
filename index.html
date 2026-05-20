@@ -57,7 +57,7 @@
 
         .metrics-row {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-bottom: 15px;
             flex-shrink: 0;
@@ -72,6 +72,11 @@
             border: 1px solid #00d4ff;
         }
 
+        .metric-card.highlight {
+            border: 2px solid #ff6b35;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+        }
+
         .metric-card h3 {
             color: #00d4ff;
             font-size: 0.75em;
@@ -79,6 +84,10 @@
             letter-spacing: 1px;
             margin-bottom: 6px;
             font-weight: 600;
+        }
+
+        .metric-card.highlight h3 {
+            color: #ff6b35;
         }
 
         .metric-card .value {
@@ -91,6 +100,18 @@
         .metric-card .subtitle {
             font-size: 0.75em;
             color: #888;
+        }
+
+        .metric-card .growth-label {
+            font-size: 0.7em;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .metric-card .growth-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff6b35;
         }
 
         .content-area {
@@ -212,6 +233,12 @@
         .ranking-container::-webkit-scrollbar-thumb:hover {
             background: #00ffff;
         }
+
+        @media (max-width: 1600px) {
+            .metrics-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -237,6 +264,12 @@
                 <div class="value" id="aboveAverage">0</div>
                 <div class="subtitle">of 21 total</div>
             </div>
+            <div class="metric-card highlight">
+                <h3>🔥 Fastest Growing</h3>
+                <div class="value" id="fastestGrowing" style="font-size: 1.4em;">—</div>
+                <div class="growth-label" id="growthLabel">vs Yesterday</div>
+                <div class="growth-value" id="growthPercent">+0%</div>
+            </div>
         </div>
 
         <div class="content-area">
@@ -257,27 +290,27 @@
     <script>
         const dashboardData = {
             currentMTD: [
-                {branch: 'OLC', amount: 10208934.14},
-                {branch: 'Santa Monica', amount: 3912154.82},
-                {branch: 'Minneapolis', amount: 3491911.78},
-                {branch: 'Malaysia', amount: 2611556.99},
-                {branch: 'Santa Clara', amount: 2468400.86},
-                {branch: 'Long Island', amount: 2282276.06},
-                {branch: 'Tampa', amount: 2265934.39},
-                {branch: 'Hong Kong', amount: 1874968.34},
-                {branch: 'Milwaukee', amount: 1837477.39},
-                {branch: 'Miami', amount: 1609157.52},
-                {branch: 'AMAT', amount: 1179069.99},
-                {branch: 'Toronto', amount: 1174837.85},
-                {branch: 'Phoenix', amount: 1153669.56},
-                {branch: 'Master Web Orders', amount: 944349.12},
-                {branch: 'Seattle', amount: 888822.59},
-                {branch: 'Montreal', amount: 767120.95},
-                {branch: 'Vancouver', amount: 729331.98},
-                {branch: 'Chicago', amount: 558490.01},
-                {branch: 'Mexico', amount: 340815.67},
-                {branch: 'Special', amount: 217145.29},
-                {branch: 'E-Sonic Web Orders', amount: 108039.77}
+                {branch: 'OLC', amount: 10208934.14, yesterdayAmount: 9500000},
+                {branch: 'Santa Monica', amount: 3912154.82, yesterdayAmount: 3300000},
+                {branch: 'Minneapolis', amount: 3491911.78, yesterdayAmount: 3200000},
+                {branch: 'Malaysia', amount: 2611556.99, yesterdayAmount: 2550000},
+                {branch: 'Santa Clara', amount: 2468400.86, yesterdayAmount: 2350000},
+                {branch: 'Long Island', amount: 2282276.06, yesterdayAmount: 2200000},
+                {branch: 'Tampa', amount: 2265934.39, yesterdayAmount: 2150000},
+                {branch: 'Hong Kong', amount: 1874968.34, yesterdayAmount: 1800000},
+                {branch: 'Milwaukee', amount: 1837477.39, yesterdayAmount: 1750000},
+                {branch: 'Miami', amount: 1609157.52, yesterdayAmount: 1500000},
+                {branch: 'AMAT', amount: 1179069.99, yesterdayAmount: 1100000},
+                {branch: 'Toronto', amount: 1174837.85, yesterdayAmount: 1120000},
+                {branch: 'Phoenix', amount: 1153669.56, yesterdayAmount: 1050000},
+                {branch: 'Master Web Orders', amount: 944349.12, yesterdayAmount: 900000},
+                {branch: 'Seattle', amount: 888822.59, yesterdayAmount: 850000},
+                {branch: 'Montreal', amount: 767120.95, yesterdayAmount: 730000},
+                {branch: 'Vancouver', amount: 729331.98, yesterdayAmount: 700000},
+                {branch: 'Chicago', amount: 558490.01, yesterdayAmount: 540000},
+                {branch: 'Mexico', amount: 340815.67, yesterdayAmount: 320000},
+                {branch: 'Special', amount: 217145.29, yesterdayAmount: 210000},
+                {branch: 'E-Sonic Web Orders', amount: 108039.77, yesterdayAmount: 105000}
             ],
             branchAverages: {},
             lastMonthMTD: {}
@@ -316,10 +349,29 @@
                 return b.amount > estimatedAvg;
             }).length;
 
+            // Calculate fastest growing branch
+            let fastestGrower = null;
+            let maxGrowth = -Infinity;
+
+            dashboardData.currentMTD.forEach(branch => {
+                if (branch.yesterdayAmount) {
+                    const growth = ((branch.amount - branch.yesterdayAmount) / branch.yesterdayAmount) * 100;
+                    if (growth > maxGrowth) {
+                        maxGrowth = growth;
+                        fastestGrower = branch;
+                    }
+                }
+            });
+
             document.getElementById('totalShipping').textContent = '$' + (total / 1000000).toFixed(1) + 'M';
             document.getElementById('topBranch').textContent = topBranch.branch;
             document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
             document.getElementById('aboveAverage').textContent = aboveCount;
+
+            if (fastestGrower) {
+                document.getElementById('fastestGrowing').textContent = fastestGrower.branch;
+                document.getElementById('growthPercent').textContent = '+' + maxGrowth.toFixed(1) + '%';
+            }
         }
 
         function renderChart() {
