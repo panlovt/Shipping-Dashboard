@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Totals MTD Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2c3e50;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .timestamp {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .metric-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .metric-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .metric-card .subtitle {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .content-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-height: 400px;
+        }
+
+        .ranking-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .ranking-container h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1.1em;
+        }
+
+        .rank-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-num {
+            font-weight: bold;
+            color: #999;
+            min-width: 30px;
+            font-size: 1.2em;
+        }
+
+        .rank-name {
+            flex: 1;
+            padding: 0 15px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .rank-amount {
+            text-align: right;
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 150px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .indicator.above {
+            background: #27ae60;
+        }
+
+        .indicator.below {
+            background: #e74c3c;
+        }
+
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1em;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-up {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-down {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .status-neutral {
+            color: #999;
+        }
+
+        footer {
+            text-align: center;
+            color: #999;
+            margin-top: 30px;
+            font-size: 0.9em;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        @media (max-width: 1200px) {
+            .content-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .metrics-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Shipping Totals Dashboard</h1>
+            <div class="timestamp" id="timestamp"></div>
+        </header>
+
+        <div class="metrics-row">
+            <div class="metric-card">
+                <h3>Total MTD Shipping</h3>
+                <div class="value" id="totalShipping">$0</div>
+                <div class="subtitle">All Branches</div>
+            </div>
+            <div class="metric-card">
+                <h3>Top Performing Branch</h3>
+                <div class="value" id="topBranch">—</div>
+                <div class="subtitle" id="topAmount">$0</div>
+            </div>
+            <div class="metric-card">
+                <h3>Branches Above Average</h3>
+                <div class="value" id="aboveAverage">0</div>
+                <div class="subtitle">of 21 total</div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="chart-container">
+                <canvas id="shippingChart"></canvas>
+            </div>
+            <div class="ranking-container">
+                <h2>Top 10 Branches</h2>
+                <div id="topRanking"></div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2 style="margin-bottom: 20px; color: #2c3e50;">All Branches - Detailed View</h2>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Branch</th>
+                        <th>MTD Shipping Total</th>
+                        <th>Branch Average</th>
+                        <th>vs. Average</th>
+                        <th>vs. Last Month</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>Last updated: <span id="footerTime"></span> | Data refreshes daily at 8:00 AM</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample data - this will be replaced by automated Databricks query
+        const dashboardData = {
+            currentMTD: [
+                {branch: 'OLC', amount: 10208934.14},
+                {branch: 'Santa Monica', amount: 3912154.82},
+                {branch: 'Minneapolis', amount: 3491911.78},
+                {branch: 'Malaysia', amount: 2611556.99},
+                {branch: 'Santa Clara', amount: 2468400.86},
+                {branch: 'Long Island', amount: 2282276.06},
+                {branch: 'Tampa', amount: 2265934.39},
+                {branch: 'Hong Kong', amount: 1874968.34},
+                {branch: 'Milwaukee', amount: 1837477.39},
+                {branch: 'Miami', amount: 1609157.52},
+                {branch: 'AMAT', amount: 1179069.99},
+                {branch: 'Toronto', amount: 1174837.85},
+                {branch: 'Phoenix', amount: 1153669.56},
+                {branch: 'Master Web Orders', amount: 944349.12},
+                {branch: 'Seattle', amount: 888822.59},
+                {branch: 'Montreal', amount: 767120.95},
+                {branch: 'Vancouver', amount: 729331.98},
+                {branch: 'Chicago', amount: 558490.01},
+                {branch: 'Mexico', amount: 340815.67},
+                {branch: 'Special', amount: 217145.29},
+                {branch: 'E-Sonic Web Orders', amount: 108039.77}
+            ],
+            // These will be populated from Databricks queries
+            branchAverages: {},
+            lastMonthMTD: {}
+        };
+
+        // Initialize dashboard
+        function initDashboard() {
+            updateTimestamp();
+            calculateMetrics();
+            renderChart();
+            renderTopRanking();
+            renderTable();
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const timeString = now.toLocaleDateString('en-US', options);
+            document.getElementById('timestamp').textContent = timeString;
+            document.getElementById('footerTime').textContent = now.toLocaleTimeString('en-US');
+        }
+
+        function calculateMetrics() {
+            const total = dashboardData.currentMTD.reduce((sum, item) => sum + item.amount, 0);
+            const topBranch = dashboardData.currentMTD[0];
+
+            // For demo, assume average is 70% of each branch's current (will be calculated from Databricks)
+            const aboveCount = dashboardData.currentMTD.filter(b => {
+                const estimatedAvg = b.amount * 0.7; // Demo: assume historical avg is 70% of current
+                return b.amount > estimatedAvg;
+            }).length;
+
+            document.getElementById('totalShipping').textContent = '$' + (total / 1000000).toFixed(1) + 'M';
+            document.getElementById('topBranch').textContent = topBranch.branch;
+            document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
+            document.getElementById('aboveAverage').textContent = aboveCount;
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('shippingChart').getContext('2d');
+            const top10 = dashboardData.currentMTD.slice(0, 10);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: top10.map(b => b.branch),
+                    datasets: [{
+                        label: 'MTD Shipping Total',
+                        data: top10.map(b => b.amount / 1000000),
+                        backgroundColor: '#2c3e50',
+                        borderColor: '#1a252f',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top 10 Branches - MTD Totals',
+                            font: {size: 16, weight: 'bold'}
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'M';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTopRanking() {
+            const top10 = dashboardData.currentMTD.slice(0, 10);
+            const html = top10.map((branch, index) => {
+                const estimatedAvg = branch.amount * 0.7;
+                const isAbove = branch.amount > estimatedAvg;
+                return `
+                    <div class="rank-item">
+                        <div class="rank-num">${index + 1}</div>
+                        <div class="rank-name">${branch.branch}</div>
+                        <div class="rank-amount">$${(branch.amount / 1000000).toFixed(2)}M</div>
+                        <div class="indicator ${isAbove ? 'above' : 'below'}"></div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('topRanking').innerHTML = html;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const rows = dashboardData.currentMTD.map((branch, index) => {
+                const estimatedAvg = branch.amount * 0.7;
+                const diff = branch.amount - estimatedAvg;
+                const diffPercent = ((diff / estimatedAvg) * 100).toFixed(1);
+
+                const statusClass = diff > 0 ? 'status-up' : (diff < 0 ? 'status-down' : 'status-neutral');
+                const statusText = diff > 0 ? `+${diffPercent}%` : `${diffPercent}%`;
+
+                return `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${branch.branch}</strong></td>
+                        <td>$${(branch.amount / 1000000).toFixed(2)}M</td>
+                        <td>$${(estimatedAvg / 1000000).toFixed(2)}M</td>
+                        <td class="${statusClass}">${statusText}</td>
+                        <td class="status-neutral">—</td>
+                    </tr>
+                `;
+            }).join('');
+            tbody.innerHTML = rows;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>
