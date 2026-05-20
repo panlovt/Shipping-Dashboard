@@ -57,7 +57,7 @@
 
         .metrics-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 12px;
             margin-bottom: 15px;
             flex-shrink: 0;
@@ -93,10 +93,22 @@
             color: #888;
         }
 
+        .metric-card .context {
+            font-size: 0.7em;
+            color: #666;
+            margin-top: 2px;
+        }
+
         .metric-card .growth-percent {
             font-size: 0.9em;
             color: #00ff99;
             margin-top: 4px;
+        }
+
+        .metric-card .growth-context {
+            font-size: 0.7em;
+            color: #666;
+            margin-top: 1px;
         }
 
         .content-area {
@@ -221,7 +233,7 @@
 
         @media (max-width: 1400px) {
             .metrics-row {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
@@ -245,14 +257,25 @@
                 <div class="subtitle" id="topAmount">$0</div>
             </div>
             <div class="metric-card">
-                <h3>🔥 Fastest Growing</h3>
+                <h3>🔥 Hottest Branch</h3>
                 <div class="value" id="fastestGrowing">—</div>
                 <div class="growth-percent" id="fastestGrowingPercent">+0%</div>
+                <div class="growth-context">vs Yesterday</div>
             </div>
             <div class="metric-card">
                 <h3>📈 Biggest Climber</h3>
                 <div class="value" id="biggestClimber">—</div>
                 <div class="subtitle" id="climberRank">No change</div>
+            </div>
+            <div class="metric-card">
+                <h3>May Projection</h3>
+                <div class="value" id="mayProjection">$0</div>
+                <div class="context">7 days remaining</div>
+            </div>
+            <div class="metric-card">
+                <h3>Annual Run Rate</h3>
+                <div class="value" id="annualRunRate">$0</div>
+                <div class="context">at current pace</div>
             </div>
         </div>
 
@@ -267,7 +290,7 @@
         </div>
 
         <footer>
-            <p>Last updated: <span id="footerTime"></span> | Data through May 19, 2026</p>
+            <p>Last updated: <span id="footerTime"></span> | Data through May 19, 2026 (13 working days)</p>
         </footer>
     </div>
 
@@ -305,6 +328,11 @@
                 rankChange: 1,
                 previousRank: 13,
                 currentRank: 12
+            },
+            projectionMetrics: {
+                businessDaysElapsed: 13,
+                businessDaysRemainingInMay: 7,
+                businessDaysInYear: 253
             }
         };
 
@@ -336,17 +364,26 @@
             const total = dashboardData.currentMTD.reduce((sum, item) => sum + item.amount, 0);
             const topBranch = dashboardData.currentMTD[0];
 
+            // Current metrics
             document.getElementById('totalShipping').textContent = '$' + (total / 1000000).toFixed(1) + 'M';
             document.getElementById('topBranch').textContent = topBranch.branch;
             document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
 
-            // Fastest Growing
+            // Hottest Branch
             document.getElementById('fastestGrowing').textContent = dashboardData.fastestGrowing.branch;
             document.getElementById('fastestGrowingPercent').textContent = '+' + dashboardData.fastestGrowing.growthPercent.toFixed(2) + '%';
 
             // Biggest Climber
             document.getElementById('biggestClimber').textContent = dashboardData.biggestClimber.branch;
-            document.getElementById('climberRank').textContent = `+${dashboardData.biggestClimber.rankChange} (${dashboardData.biggestClimber.previousRank}→${dashboardData.biggestClimber.currentRank})`;
+            document.getElementById('climberRank').textContent = `↑ ${dashboardData.biggestClimber.rankChange} spot (#${dashboardData.biggestClimber.previousRank} → #${dashboardData.biggestClimber.currentRank})`;
+
+            // Projections
+            const dailyPace = total / dashboardData.projectionMetrics.businessDaysElapsed;
+            const mayProjection = total + (dailyPace * dashboardData.projectionMetrics.businessDaysRemainingInMay);
+            const annualRunRate = dailyPace * dashboardData.projectionMetrics.businessDaysInYear;
+
+            document.getElementById('mayProjection').textContent = '$' + (mayProjection / 1000000).toFixed(1) + 'M';
+            document.getElementById('annualRunRate').textContent = '$' + (annualRunRate / 1000000).toFixed(0) + 'M';
         }
 
         function renderChart() {
