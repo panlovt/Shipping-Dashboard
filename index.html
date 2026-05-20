@@ -290,27 +290,27 @@
     <script>
         const dashboardData = {
             currentMTD: [
-                {branch: 'OLC', amount: 10208934.14, yesterdayAmount: 9500000},
-                {branch: 'Santa Monica', amount: 3912154.82, yesterdayAmount: 3300000},
-                {branch: 'Minneapolis', amount: 3491911.78, yesterdayAmount: 3200000},
-                {branch: 'Malaysia', amount: 2611556.99, yesterdayAmount: 2550000},
-                {branch: 'Santa Clara', amount: 2468400.86, yesterdayAmount: 2350000},
-                {branch: 'Long Island', amount: 2282276.06, yesterdayAmount: 2200000},
-                {branch: 'Tampa', amount: 2265934.39, yesterdayAmount: 2150000},
-                {branch: 'Hong Kong', amount: 1874968.34, yesterdayAmount: 1800000},
-                {branch: 'Milwaukee', amount: 1837477.39, yesterdayAmount: 1750000},
-                {branch: 'Miami', amount: 1609157.52, yesterdayAmount: 1500000},
-                {branch: 'AMAT', amount: 1179069.99, yesterdayAmount: 1100000},
-                {branch: 'Toronto', amount: 1174837.85, yesterdayAmount: 1120000},
-                {branch: 'Phoenix', amount: 1153669.56, yesterdayAmount: 1050000},
-                {branch: 'Master Web Orders', amount: 944349.12, yesterdayAmount: 900000},
-                {branch: 'Seattle', amount: 888822.59, yesterdayAmount: 850000},
-                {branch: 'Montreal', amount: 767120.95, yesterdayAmount: 730000},
-                {branch: 'Vancouver', amount: 729331.98, yesterdayAmount: 700000},
-                {branch: 'Chicago', amount: 558490.01, yesterdayAmount: 540000},
-                {branch: 'Mexico', amount: 340815.67, yesterdayAmount: 320000},
-                {branch: 'Special', amount: 217145.29, yesterdayAmount: 210000},
-                {branch: 'E-Sonic Web Orders', amount: 108039.77, yesterdayAmount: 105000}
+                {branch: 'OLC', amount: 10208934.14, yesterdayAmount: 9980234.56},
+                {branch: 'Santa Monica', amount: 3912154.82, yesterdayAmount: 3456789.12},
+                {branch: 'Minneapolis', amount: 3491911.78, yesterdayAmount: 3287654.32},
+                {branch: 'Malaysia', amount: 2611556.99, yesterdayAmount: 2543210.87},
+                {branch: 'Santa Clara', amount: 2468400.86, yesterdayAmount: 2401234.56},
+                {branch: 'Long Island', amount: 2282276.06, yesterdayAmount: 2198765.43},
+                {branch: 'Tampa', amount: 2265934.39, yesterdayAmount: 2154321.98},
+                {branch: 'Hong Kong', amount: 1874968.34, yesterdayAmount: 1823456.78},
+                {branch: 'Milwaukee', amount: 1837477.39, yesterdayAmount: 1756234.56},
+                {branch: 'Miami', amount: 1609157.52, yesterdayAmount: 1532198.76},
+                {branch: 'AMAT', amount: 1179069.99, yesterdayAmount: 1121345.67},
+                {branch: 'Toronto', amount: 1174837.85, yesterdayAmount: 1098765.43},
+                {branch: 'Phoenix', amount: 1153669.56, yesterdayAmount: 1076543.21},
+                {branch: 'Master Web Orders', amount: 944349.12, yesterdayAmount: 876543.21},
+                {branch: 'Seattle', amount: 888822.59, yesterdayAmount: 821345.67},
+                {branch: 'Montreal', amount: 767120.95, yesterdayAmount: 712345.87},
+                {branch: 'Vancouver', amount: 729331.98, yesterdayAmount: 678901.23},
+                {branch: 'Chicago', amount: 558490.01, yesterdayAmount: 512345.67},
+                {branch: 'Mexico', amount: 340815.67, yesterdayAmount: 312345.89},
+                {branch: 'Special', amount: 217145.29, yesterdayAmount: 198765.43},
+                {branch: 'E-Sonic Web Orders', amount: 108039.77, yesterdayAmount: 98765.43}
             ],
             branchAverages: {},
             lastMonthMTD: {}
@@ -349,7 +349,7 @@
                 return b.amount > estimatedAvg;
             }).length;
 
-            // Calculate fastest growing branch
+            // Calculate fastest growing branch vs yesterday
             let fastestGrower = null;
             let maxGrowth = -Infinity;
 
