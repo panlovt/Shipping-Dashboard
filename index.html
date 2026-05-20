@@ -72,11 +72,6 @@
             border: 1px solid #00d4ff;
         }
 
-        .metric-card.highlight {
-            border: 2px solid #ff6b35;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
-        }
-
         .metric-card h3 {
             color: #00d4ff;
             font-size: 0.75em;
@@ -84,10 +79,6 @@
             letter-spacing: 1px;
             margin-bottom: 6px;
             font-weight: 600;
-        }
-
-        .metric-card.highlight h3 {
-            color: #ff6b35;
         }
 
         .metric-card .value {
@@ -102,16 +93,10 @@
             color: #888;
         }
 
-        .metric-card .growth-label {
-            font-size: 0.7em;
-            color: #888;
-            margin-bottom: 4px;
-        }
-
-        .metric-card .growth-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ff6b35;
+        .metric-card .growth-percent {
+            font-size: 0.9em;
+            color: #00ff99;
+            margin-top: 4px;
         }
 
         .content-area {
@@ -234,7 +219,7 @@
             background: #00ffff;
         }
 
-        @media (max-width: 1600px) {
+        @media (max-width: 1400px) {
             .metrics-row {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -252,7 +237,7 @@
             <div class="metric-card">
                 <h3>Total MTD Shipping</h3>
                 <div class="value" id="totalShipping">$0</div>
-                <div class="subtitle">All Branches</div>
+                <div class="subtitle">May 1-19</div>
             </div>
             <div class="metric-card">
                 <h3>Top Performing Branch</h3>
@@ -260,15 +245,14 @@
                 <div class="subtitle" id="topAmount">$0</div>
             </div>
             <div class="metric-card">
-                <h3>Branches Above Average</h3>
-                <div class="value" id="aboveAverage">0</div>
-                <div class="subtitle">of 21 total</div>
-            </div>
-            <div class="metric-card highlight">
                 <h3>🔥 Fastest Growing</h3>
-                <div class="value" id="fastestGrowing" style="font-size: 1.4em;">—</div>
-                <div class="growth-label" id="growthLabel">vs Yesterday</div>
-                <div class="growth-value" id="growthPercent">+0%</div>
+                <div class="value" id="fastestGrowing">—</div>
+                <div class="growth-percent" id="fastestGrowingPercent">+0%</div>
+            </div>
+            <div class="metric-card">
+                <h3>📈 Biggest Climber</h3>
+                <div class="value" id="biggestClimber">—</div>
+                <div class="subtitle" id="climberRank">No change</div>
             </div>
         </div>
 
@@ -277,43 +261,51 @@
                 <canvas id="shippingChart"></canvas>
             </div>
             <div class="ranking-container">
-                <h2>Top 15 Branches</h2>
+                <h2>Top 10 Branches</h2>
                 <div id="topRanking"></div>
             </div>
         </div>
 
         <footer>
-            <p>Last updated: <span id="footerTime"></span> | Data refreshes daily at 8:00 AM</p>
+            <p>Last updated: <span id="footerTime"></span> | Data through May 19, 2026 (May 20 end-of-day pending)</p>
         </footer>
     </div>
 
     <script>
         const dashboardData = {
             currentMTD: [
-                {branch: 'OLC', amount: 10208934.14, yesterdayAmount: 9980234.56},
-                {branch: 'Santa Monica', amount: 3912154.82, yesterdayAmount: 3456789.12},
-                {branch: 'Minneapolis', amount: 3491911.78, yesterdayAmount: 3287654.32},
-                {branch: 'Malaysia', amount: 2611556.99, yesterdayAmount: 2543210.87},
-                {branch: 'Santa Clara', amount: 2468400.86, yesterdayAmount: 2401234.56},
-                {branch: 'Long Island', amount: 2282276.06, yesterdayAmount: 2198765.43},
-                {branch: 'Tampa', amount: 2265934.39, yesterdayAmount: 2154321.98},
-                {branch: 'Hong Kong', amount: 1874968.34, yesterdayAmount: 1823456.78},
-                {branch: 'Milwaukee', amount: 1837477.39, yesterdayAmount: 1756234.56},
-                {branch: 'Miami', amount: 1609157.52, yesterdayAmount: 1532198.76},
-                {branch: 'AMAT', amount: 1179069.99, yesterdayAmount: 1121345.67},
-                {branch: 'Toronto', amount: 1174837.85, yesterdayAmount: 1098765.43},
-                {branch: 'Phoenix', amount: 1153669.56, yesterdayAmount: 1076543.21},
-                {branch: 'Master Web Orders', amount: 944349.12, yesterdayAmount: 876543.21},
-                {branch: 'Seattle', amount: 888822.59, yesterdayAmount: 821345.67},
-                {branch: 'Montreal', amount: 767120.95, yesterdayAmount: 712345.87},
-                {branch: 'Vancouver', amount: 729331.98, yesterdayAmount: 678901.23},
-                {branch: 'Chicago', amount: 558490.01, yesterdayAmount: 512345.67},
-                {branch: 'Mexico', amount: 340815.67, yesterdayAmount: 312345.89},
-                {branch: 'Special', amount: 217145.29, yesterdayAmount: 198765.43},
-                {branch: 'E-Sonic Web Orders', amount: 108039.77, yesterdayAmount: 98765.43}
+                {branch: 'OLC', amount: 10208934.14},
+                {branch: 'Santa Monica', amount: 3912154.82},
+                {branch: 'Minneapolis', amount: 3491911.78},
+                {branch: 'Malaysia', amount: 2611557.00},
+                {branch: 'Santa Clara', amount: 2468400.86},
+                {branch: 'Long Island', amount: 2282276.06},
+                {branch: 'Tampa', amount: 2265934.39},
+                {branch: 'Hong Kong', amount: 1874968.34},
+                {branch: 'Milwaukee', amount: 1837477.39},
+                {branch: 'Miami', amount: 1609157.52},
+                {branch: 'AMAT', amount: 1179069.99},
+                {branch: 'Toronto', amount: 1174837.85},
+                {branch: 'Phoenix', amount: 1153669.56},
+                {branch: 'Master Web Orders', amount: 944349.12},
+                {branch: 'Seattle', amount: 888822.59},
+                {branch: 'Montreal', amount: 767120.95},
+                {branch: 'Vancouver', amount: 729331.98},
+                {branch: 'Chicago', amount: 558490.01},
+                {branch: 'Mexico', amount: 340815.67},
+                {branch: 'Special', amount: 217145.29},
+                {branch: 'E-Sonic Web Orders', amount: 108039.77}
             ],
-            branchAverages: {},
-            lastMonthMTD: {}
+            fastestGrowing: {
+                branch: 'N/A',
+                growthPercent: 0.00
+            },
+            biggestClimber: {
+                branch: 'N/A',
+                rankChange: 0,
+                previousRank: 0,
+                currentRank: 0
+            }
         };
 
         let chartInstance = null;
@@ -344,39 +336,22 @@
             const total = dashboardData.currentMTD.reduce((sum, item) => sum + item.amount, 0);
             const topBranch = dashboardData.currentMTD[0];
 
-            const aboveCount = dashboardData.currentMTD.filter(b => {
-                const estimatedAvg = b.amount * 0.7;
-                return b.amount > estimatedAvg;
-            }).length;
-
-            // Calculate fastest growing branch vs yesterday
-            let fastestGrower = null;
-            let maxGrowth = -Infinity;
-
-            dashboardData.currentMTD.forEach(branch => {
-                if (branch.yesterdayAmount) {
-                    const growth = ((branch.amount - branch.yesterdayAmount) / branch.yesterdayAmount) * 100;
-                    if (growth > maxGrowth) {
-                        maxGrowth = growth;
-                        fastestGrower = branch;
-                    }
-                }
-            });
-
             document.getElementById('totalShipping').textContent = '$' + (total / 1000000).toFixed(1) + 'M';
             document.getElementById('topBranch').textContent = topBranch.branch;
             document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
-            document.getElementById('aboveAverage').textContent = aboveCount;
 
-            if (fastestGrower) {
-                document.getElementById('fastestGrowing').textContent = fastestGrower.branch;
-                document.getElementById('growthPercent').textContent = '+' + maxGrowth.toFixed(1) + '%';
-            }
+            // Fastest Growing
+            document.getElementById('fastestGrowing').textContent = dashboardData.fastestGrowing.branch;
+            document.getElementById('fastestGrowingPercent').textContent = '+' + dashboardData.fastestGrowing.growthPercent.toFixed(2) + '%';
+
+            // Biggest Climber
+            document.getElementById('biggestClimber').textContent = dashboardData.biggestClimber.branch;
+            document.getElementById('climberRank').textContent = `+${dashboardData.biggestClimber.rankChange} (${dashboardData.biggestClimber.previousRank}→${dashboardData.biggestClimber.currentRank})`;
         }
 
         function renderChart() {
             const ctx = document.getElementById('shippingChart').getContext('2d');
-            const top15 = dashboardData.currentMTD.slice(0, 15);
+            const top10 = dashboardData.currentMTD.slice(0, 10);
 
             if (chartInstance) {
                 chartInstance.destroy();
@@ -385,10 +360,10 @@
             chartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: top15.map(b => b.branch),
+                    labels: top10.map(b => b.branch),
                     datasets: [{
                         label: 'MTD Shipping Total',
-                        data: top15.map(b => b.amount / 1000000),
+                        data: top10.map(b => b.amount / 1000000),
                         backgroundColor: '#00d4ff',
                         borderColor: '#00ffff',
                         borderWidth: 2
@@ -404,7 +379,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Top 15 Branches - MTD Totals',
+                            text: 'Top 10 Branches - MTD Totals',
                             font: {size: 13, weight: 'bold', color: '#00d4ff'},
                             color: '#00d4ff',
                             padding: 10
@@ -438,16 +413,15 @@
         }
 
         function renderTopRanking() {
-            const top15 = dashboardData.currentMTD.slice(0, 15);
-            const html = top15.map((branch, index) => {
-                const estimatedAvg = branch.amount * 0.7;
-                const isAbove = branch.amount > estimatedAvg;
+            const top10 = dashboardData.currentMTD.slice(0, 10);
+            const html = top10.map((branch, index) => {
+                const isTop = index < 5;
                 return `
                     <div class="rank-item">
                         <div class="rank-num">${index + 1}</div>
                         <div class="rank-name">${branch.branch}</div>
                         <div class="rank-amount">$${(branch.amount / 1000000).toFixed(2)}M</div>
-                        <div class="indicator ${isAbove ? 'above' : 'below'}"></div>
+                        <div class="indicator ${isTop ? 'above' : 'below'}"></div>
                     </div>
                 `;
             }).join('');
