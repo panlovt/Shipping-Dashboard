@@ -50,191 +50,165 @@
             letter-spacing: 1px;
         }
 
-        .timestamp {
+        .subtitle {
             font-size: 0.95em;
             color: #888;
+            margin-bottom: 0;
         }
 
-        .metrics-row {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
+        main {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
-            margin-bottom: 15px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
             flex-shrink: 0;
         }
 
         .metric-card {
-            background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1);
-            text-align: center;
-            border: 1px solid #00d4ff;
+            background: #1a1f2e;
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 90px;
         }
 
-        .metric-card h3 {
-            color: #00d4ff;
-            font-size: 0.75em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .metric-card .value {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 3px;
-        }
-
-        .metric-card .subtitle {
-            font-size: 0.75em;
+        .metric-label {
+            font-size: 0.85em;
             color: #888;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .metric-card .context {
-            font-size: 0.7em;
+        .metric-value {
+            font-size: 1.6em;
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        .metric-subtext {
+            font-size: 0.8em;
             color: #666;
-            margin-top: 2px;
-        }
-
-        .metric-card .growth-percent {
-            font-size: 0.9em;
-            color: #00ff99;
             margin-top: 4px;
         }
 
-        .metric-card .growth-context {
-            font-size: 0.7em;
-            color: #666;
-            margin-top: 1px;
-        }
-
-        .content-area {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 12px;
-            flex: 1;
-            min-height: 0;
-        }
-
         .chart-container {
-            background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
+            flex: 1;
+            min-height: 300px;
+            background: #1a1f2e;
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
             padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1);
+            position: relative;
             display: flex;
             flex-direction: column;
-            min-height: 0;
-            border: 1px solid #00d4ff;
         }
 
-        .chart-container canvas {
+        .chart-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        #shippingChart {
             flex: 1;
-            min-height: 0;
+            position: relative;
         }
 
         .ranking-container {
-            background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .ranking-table {
+            background: #1a1f2e;
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            padding: 12px;
+            max-height: 250px;
             overflow-y: auto;
-            border: 1px solid #00d4ff;
         }
 
-        .ranking-container h2 {
-            color: #00d4ff;
-            margin-bottom: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-        }
-
-        .rank-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #2a3a4a;
+        .ranking-title {
             font-size: 0.95em;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .rank-item:last-child {
+        .ranking-item {
+            display: grid;
+            grid-template-columns: 30px 1fr 80px;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid #2a2f3e;
+            font-size: 0.85em;
+            align-items: center;
+        }
+
+        .ranking-item:last-child {
             border-bottom: none;
         }
 
-        .rank-num {
-            font-weight: bold;
+        .ranking-rank {
             color: #00d4ff;
-            min-width: 25px;
-            font-size: 1em;
+            font-weight: 600;
+            text-align: center;
         }
 
-        .rank-name {
-            flex: 1;
-            padding: 0 10px;
-            font-weight: 500;
-            color: #ffffff;
-            white-space: nowrap;
+        .ranking-name {
+            color: #e0e0e0;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .rank-amount {
+        .ranking-value {
+            color: #888;
             text-align: right;
-            font-weight: bold;
-            color: #00ff99;
-            min-width: 80px;
-        }
-
-        .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-left: 6px;
-            flex-shrink: 0;
-            box-shadow: 0 0 8px currentColor;
-        }
-
-        .indicator.above {
-            background: #00ff99;
-        }
-
-        .indicator.below {
-            background: #ff6b6b;
+            font-size: 0.8em;
         }
 
         footer {
             text-align: center;
-            color: #666;
-            margin-top: 8px;
-            font-size: 0.8em;
             padding-top: 8px;
-            border-top: 1px solid #2a3a4a;
+            margin-top: 8px;
+            border-top: 1px solid #2a2f3e;
+            font-size: 0.8em;
+            color: #666;
             flex-shrink: 0;
         }
 
-        .ranking-container::-webkit-scrollbar {
+        ::-webkit-scrollbar {
             width: 6px;
         }
 
-        .ranking-container::-webkit-scrollbar-track {
-            background: #1a2332;
+        ::-webkit-scrollbar-track {
+            background: #0f1419;
         }
 
-        .ranking-container::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
             background: #00d4ff;
             border-radius: 3px;
         }
 
-        .ranking-container::-webkit-scrollbar-thumb:hover {
-            background: #00ffff;
-        }
-
-        @media (max-width: 1400px) {
-            .metrics-row {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00b8cc;
         }
     </style>
 </head>
@@ -242,231 +216,216 @@
     <div class="container">
         <header>
             <h1>📊 May Shipping Totals Dashboard</h1>
-            <div class="timestamp" id="timestamp"></div>
+            <p class="subtitle">May 1-20</p>
         </header>
 
-        <div class="metrics-row">
-            <div class="metric-card">
-                <h3>Total MTD Shipping</h3>
-                <div class="value" id="totalShipping">$0</div>
-                <div class="subtitle">May 1-19</div>
+        <main>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Total MTD Shipping</div>
+                    <div class="metric-value">$45.9M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Top Performing Branch</div>
+                    <div class="metric-value">OLC</div>
+                    <div class="metric-subtext">$11.1M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Hottest Branch</div>
+                    <div class="metric-value">Mexico</div>
+                    <div class="metric-subtext">↑ 25.65%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Biggest Climber</div>
+                    <div class="metric-value">Tampa</div>
+                    <div class="metric-subtext">↑ 1 spot (#7 → #6)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">May Projection</div>
+                    <div class="metric-value">$51.2M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Annual Run Rate</div>
+                    <div class="metric-value">$91.4M</div>
+                </div>
             </div>
-            <div class="metric-card">
-                <h3>Top Performing Branch</h3>
-                <div class="value" id="topBranch">—</div>
-                <div class="subtitle" id="topAmount">$0</div>
-            </div>
-            <div class="metric-card">
-                <h3>🔥 Hottest Branch</h3>
-                <div class="value" id="fastestGrowing">—</div>
-                <div class="growth-percent" id="fastestGrowingPercent">+0%</div>
-                <div class="growth-context">vs Yesterday</div>
-            </div>
-            <div class="metric-card">
-                <h3>📈 Biggest Climber</h3>
-                <div class="value" id="biggestClimber">—</div>
-                <div class="subtitle" id="climberRank">No change</div>
-            </div>
-            <div class="metric-card">
-                <h3>May Projection</h3>
-                <div class="value" id="mayProjection">$0</div>
-                <div class="context">7 days remaining</div>
-            </div>
-            <div class="metric-card">
-                <h3>Annual Run Rate</h3>
-                <div class="value" id="annualRunRate">$0</div>
-                <div class="context">at current pace</div>
-            </div>
-        </div>
 
-        <div class="content-area">
             <div class="chart-container">
+                <div class="chart-title">All 21 Branches - Shipping by Volume</div>
                 <canvas id="shippingChart"></canvas>
             </div>
+
             <div class="ranking-container">
-                <h2>Top 15 Branches</h2>
-                <div id="topRanking"></div>
+                <div class="ranking-table">
+                    <div class="ranking-title">Top 15 by Total</div>
+                    <div id="topRanking"></div>
+                </div>
+                <div class="ranking-table">
+                    <div class="ranking-title">Growth Leaders</div>
+                    <div id="growthRanking"></div>
+                </div>
             </div>
-        </div>
+        </main>
 
         <footer>
-            <p>Last updated: <span id="footerTime"></span> | Data through May 19, 2026 (13 working days)</p>
+            Data through May 20, 2026
         </footer>
     </div>
 
     <script>
         const dashboardData = {
-            currentMTD: [
-                {branch: 'OLC', amount: 10208934.14},
-                {branch: 'Santa Monica', amount: 3912154.82},
-                {branch: 'Minneapolis', amount: 3491911.78},
-                {branch: 'Malaysia', amount: 2611557.00},
-                {branch: 'Santa Clara', amount: 2468400.86},
-                {branch: 'Long Island', amount: 2282276.06},
-                {branch: 'Tampa', amount: 2265934.39},
-                {branch: 'Hong Kong', amount: 1874968.34},
-                {branch: 'Milwaukee', amount: 1837477.39},
-                {branch: 'Miami', amount: 1609157.52},
-                {branch: 'AMAT', amount: 1179069.99},
-                {branch: 'Toronto', amount: 1174837.85},
-                {branch: 'Phoenix', amount: 1153669.56},
-                {branch: 'Master Web Orders', amount: 944349.12},
-                {branch: 'Seattle', amount: 888822.59},
-                {branch: 'Montreal', amount: 767120.95},
-                {branch: 'Vancouver', amount: 729331.98},
-                {branch: 'Chicago', amount: 558490.01},
-                {branch: 'Mexico', amount: 340815.67},
-                {branch: 'Special', amount: 217145.29},
-                {branch: 'E-Sonic Web Orders', amount: 108039.77}
-            ],
+            date: 'May 1-20, 2026',
+            totalMTD: 45931318.72,
+            businessDaysTotal: 20,
+            businessDaysElapsed: 20,
+            businessDaysRemaining: 0,
+            topPerformer: {
+                name: 'OLC',
+                total: 11078552.36
+            },
             fastestGrowing: {
-                branch: 'Vancouver',
-                growthPercent: 17.92
+                name: 'Mexico',
+                growth: 25.65,
+                daily: 87428.23
             },
             biggestClimber: {
-                branch: 'Toronto',
-                rankChange: 1,
-                previousRank: 13,
-                currentRank: 12
+                name: 'Tampa',
+                movement: 1,
+                oldRank: 7,
+                newRank: 6
             },
-            projectionMetrics: {
-                businessDaysElapsed: 13,
-                businessDaysRemainingInMay: 7,
-                businessDaysInYear: 253
+            branches: {
+                'OLC': 11078552.36,
+                'Santa Monica': 4204394.19,
+                'Minneapolis': 3763007.62,
+                'Malaysia': 2764181.36,
+                'Santa Clara': 2668503.51,
+                'Tampa': 2548072.75,
+                'Long Island': 2495286.94,
+                'Hong Kong': 2040922.25,
+                'Milwaukee': 1956760.25,
+                'Miami': 1749479.06,
+                'Toronto': 1249143.68,
+                'AMAT': 1247068.98,
+                'Phoenix': 1240473.58,
+                'Master Web Orders': 1008058.96,
+                'Seattle': 963205.50,
+                'Montreal': 804639.51,
+                'Vancouver': 767990.49,
+                'Chicago': 648368.48,
+                'Mexico': 428243.90,
+                'Special': 247163.20,
+                'E-Sonic Web Orders': 115933.94
             }
         };
 
-        let chartInstance = null;
+        const ctx = document.getElementById('shippingChart').getContext('2d');
+        const labels = Object.keys(dashboardData.branches);
+        const data = Object.values(dashboardData.branches);
 
-        function initDashboard() {
-            updateTimestamp();
-            calculateMetrics();
-            renderChart();
-            renderTopRanking();
-        }
-
-        function updateTimestamp() {
-            const now = new Date();
-            const options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            const timeString = now.toLocaleDateString('en-US', options);
-            document.getElementById('timestamp').textContent = timeString;
-            document.getElementById('footerTime').textContent = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
-        }
-
-        function calculateMetrics() {
-            const total = dashboardData.currentMTD.reduce((sum, item) => sum + item.amount, 0);
-            const topBranch = dashboardData.currentMTD[0];
-
-            // Current metrics
-            document.getElementById('totalShipping').textContent = '$' + (total / 1000000).toFixed(1) + 'M';
-            document.getElementById('topBranch').textContent = topBranch.branch;
-            document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
-
-            // Hottest Branch
-            document.getElementById('fastestGrowing').textContent = dashboardData.fastestGrowing.branch;
-            document.getElementById('fastestGrowingPercent').textContent = '+' + dashboardData.fastestGrowing.growthPercent.toFixed(2) + '%';
-
-            // Biggest Climber
-            document.getElementById('biggestClimber').textContent = dashboardData.biggestClimber.branch;
-            document.getElementById('climberRank').textContent = `↑ ${dashboardData.biggestClimber.rankChange} spot (#${dashboardData.biggestClimber.previousRank} → #${dashboardData.biggestClimber.currentRank})`;
-
-            // Projections
-            const dailyPace = total / dashboardData.projectionMetrics.businessDaysElapsed;
-            const mayProjection = total + (dailyPace * dashboardData.projectionMetrics.businessDaysRemainingInMay);
-            const annualRunRate = dailyPace * dashboardData.projectionMetrics.businessDaysInYear;
-
-            document.getElementById('mayProjection').textContent = '$' + (mayProjection / 1000000).toFixed(1) + 'M';
-            document.getElementById('annualRunRate').textContent = '$' + (annualRunRate / 1000000).toFixed(0) + 'M';
-        }
-
-        function renderChart() {
-            const ctx = document.getElementById('shippingChart').getContext('2d');
-            const allBranches = dashboardData.currentMTD;
-
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: allBranches.map(b => b.branch),
-                    datasets: [{
-                        label: 'MTD Shipping Total',
-                        data: allBranches.map(b => b.amount / 1000000),
-                        backgroundColor: '#00d4ff',
-                        borderColor: '#00ffff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Branch Performance Overview',
-                            font: {size: 13, weight: 'bold', color: '#00d4ff'},
-                            color: '#00d4ff',
-                            padding: 10
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value + 'M';
-                                },
-                                font: {size: 11},
-                                color: '#888'
-                            },
-                            grid: {
-                                color: '#2a3a4a'
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: {size: 10},
-                                color: '#888'
-                            },
-                            grid: {
-                                color: '#2a3a4a'
+        new Chart(ctx, {
+            type: 'barh',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Shipping Total (MTD)',
+                    data: data,
+                    backgroundColor: '#00d4ff',
+                    borderColor: '#00a3b3',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.parsed.x.toLocaleString('en-US', {maximumFractionDigits: 0});
                             }
                         }
                     }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#888' },
+                        grid: { color: '#2a2f3e' },
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + (context.value / 1000000).toFixed(1) + 'M';
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: { color: '#888', font: { size: 11 } },
+                        grid: { display: false }
+                    }
                 }
-            });
-        }
+            }
+        });
 
-        function renderTopRanking() {
-            const top15 = dashboardData.currentMTD.slice(0, 15);
-            const html = top15.map((branch, index) => {
-                const isTop = index < 5;
-                return `
-                    <div class="rank-item">
-                        <div class="rank-num">${index + 1}</div>
-                        <div class="rank-name">${branch.branch}</div>
-                        <div class="rank-amount">$${(branch.amount / 1000000).toFixed(2)}M</div>
-                        <div class="indicator ${isTop ? 'above' : 'below'}"></div>
-                    </div>
-                `;
-            }).join('');
-            document.getElementById('topRanking').innerHTML = html;
-        }
+        // Populate top 15 ranking
+        const topRankingDiv = document.getElementById('topRanking');
+        const sorted = Object.entries(dashboardData.branches)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 15);
 
-        document.addEventListener('DOMContentLoaded', initDashboard);
-        setInterval(updateTimestamp, 60000);
+        sorted.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'ranking-item';
+            div.innerHTML = `
+                <div class="ranking-rank">#${index + 1}</div>
+                <div class="ranking-name">${item[0]}</div>
+                <div class="ranking-value">$${(item[1] / 1000000).toFixed(2)}M</div>
+            `;
+            topRankingDiv.appendChild(div);
+        });
+
+        // Populate growth leaders (top 10 by percentage growth)
+        const may19 = {
+            'OLC': 10208934.14,
+            'Santa Monica': 3912154.82,
+            'Minneapolis': 3491911.78,
+            'Malaysia': 2611556.99,
+            'Santa Clara': 2468400.86,
+            'Long Island': 2282276.06,
+            'Tampa': 2265934.39,
+            'Hong Kong': 1874968.34,
+            'Milwaukee': 1837477.39,
+            'Miami': 1609157.52,
+            'AMAT': 1179069.99,
+            'Toronto': 1174837.85,
+            'Phoenix': 1153669.56,
+            'Master Web Orders': 944349.12,
+            'Seattle': 888822.59,
+            'Montreal': 767120.95,
+            'Vancouver': 729331.98,
+            'Chicago': 558490.01,
+            'Mexico': 340815.67,
+            'Special': 217145.29,
+            'E-Sonic Web Orders': 108039.77
+        };
+
+        const growth = Object.entries(dashboardData.branches).map(([name, val20]) => {
+            const val19 = may19[name];
+            const pct = ((val20 - val19) / val19) * 100;
+            return { name, growth: pct };
+        }).sort((a, b) => b.growth - a.growth).slice(0, 10);
+
+        const growthRankingDiv = document.getElementById('growthRanking');
+        growth.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'ranking-item';
+            div.innerHTML = `
+                <div class="ranking-rank">#${index + 1}</div>
+                <div class="ranking-name">${item.name}</div>
+                <div class="ranking-value">${item.growth.toFixed(2)}%</div>
+            `;
+            growthRankingDiv.appendChild(div);
+        });
     </script>
 </body>
 </html>
