@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>May Shipping Totals Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -125,8 +124,12 @@
 
         #chartContainer {
             flex: 1;
-            position: relative;
-            min-height: 250px;
+            overflow-y: auto;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
         }
 
         .ranking-container {
@@ -266,9 +269,7 @@
 
             <div class="chart-section">
                 <div class="chart-title">All 21 Branches - Shipping by Volume</div>
-                <div id="chartContainer">
-                    <canvas id="shippingChart"></canvas>
-                </div>
+                <div id="chartContainer"></div>
             </div>
 
             <div class="ranking-container">
@@ -338,43 +339,30 @@
             }
         };
 
-        function initChart() {
-            var canvas = document.getElementById('shippingChart');
-            if (!canvas) return;
+        function createSVGChart() {
+            var container = document.getElementById('chartContainer');
+            var entries = Object.entries(dashboardData.branches).sort(function(a, b) { return b[1] - a[1]; });
+            var maxValue = entries[0][1];
+            var chartHeight = entries.length * 20;
+            var barHeight = 18;
+            var leftPadding = 150;
+            var chartWidth = container.clientWidth - leftPadding - 20;
+
+            var svg = '<svg viewBox="0 0 ' + container.clientWidth + ' ' + chartHeight + '" xmlns="http://www.w3.org/2000/svg">';
             
-            var labels = Object.keys(dashboardData.branches);
-            var data = Object.values(dashboardData.branches);
-            var ctx = canvas.getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: '#00d4ff',
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            ticks: { color: '#888' },
-                            grid: { color: '#2a2f3e' }
-                        },
-                        y: {
-                            ticks: { color: '#888' },
-                            grid: { display: false }
-                        }
-                    }
-                }
+            entries.forEach(function(item, index) {
+                var name = item[0];
+                var value = item[1];
+                var barWidth = (value / maxValue) * chartWidth;
+                var y = index * 20 + 2;
+                
+                svg += '<rect x="' + leftPadding + '" y="' + y + '" width="' + barWidth + '" height="' + barHeight + '" fill="#00d4ff" rx="2"/>';
+                svg += '<text x="8" y="' + (y + 13) + '" font-size="12" fill="#888" font-family="sans-serif">' + name + '</text>';
+                svg += '<text x="' + (leftPadding + barWidth + 8) + '" y="' + (y + 13) + '" font-size="11" fill="#888" font-family="sans-serif">$' + (value / 1e6).toFixed(1) + 'M</text>';
             });
+            
+            svg += '</svg>';
+            container.innerHTML = svg;
         }
 
         function initRankings() {
@@ -414,13 +402,15 @@
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(initChart, 100);
+                createSVGChart();
                 initRankings();
             });
         } else {
-            setTimeout(initChart, 100);
+            createSVGChart();
             initRankings();
         }
+
+        window.addEventListener('resize', createSVGChart);
     </script>
 </body>
 </html>
