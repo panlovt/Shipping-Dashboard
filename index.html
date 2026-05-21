@@ -127,7 +127,6 @@
             flex: 1;
             position: relative;
             min-height: 250px;
-            width: 100%;
         }
 
         .ranking-container {
@@ -290,7 +289,7 @@
     </div>
 
     <script>
-        const dashboardData = {
+        var dashboardData = {
             branches: {
                 'OLC': 11078552.36,
                 'Santa Monica': 4204394.19,
@@ -339,14 +338,14 @@
             }
         };
 
-        function createChart() {
-            const canvas = document.getElementById('shippingChart');
+        function initChart() {
+            var canvas = document.getElementById('shippingChart');
             if (!canvas) return;
-
-            const labels = Object.keys(dashboardData.branches);
-            const data = Object.values(dashboardData.branches);
-
-            const ctx = canvas.getContext('2d');
+            
+            var labels = Object.keys(dashboardData.branches);
+            var data = Object.values(dashboardData.branches);
+            var ctx = canvas.getContext('2d');
+            
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -366,10 +365,7 @@
                     },
                     scales: {
                         x: {
-                            ticks: { 
-                                color: '#888', 
-                                callback: (v) => '$' + (v / 1e6).toFixed(1) + 'M'
-                            },
+                            ticks: { color: '#888' },
                             grid: { color: '#2a2f3e' }
                         },
                         y: {
@@ -381,47 +377,49 @@
             });
         }
 
-        function populateRankings() {
-            // Top 15
-            const top = Object.entries(dashboardData.branches)
-                .sort((a, b) => b[1] - a[1])
+        function initRankings() {
+            var topDiv = document.getElementById('topRanking');
+            var growthDiv = document.getElementById('growthRanking');
+            
+            var sorted = Object.entries(dashboardData.branches)
+                .sort(function(a, b) { return b[1] - a[1]; })
                 .slice(0, 15);
 
-            document.getElementById('topRanking').innerHTML = top.map((item, i) => `
-                <div class="ranking-item">
-                    <div class="ranking-rank">#${i + 1}</div>
-                    <div class="ranking-name">${item[0]}</div>
-                    <div class="ranking-value">$${(item[1] / 1e6).toFixed(1)}M</div>
-                </div>
-            `).join('');
+            sorted.forEach(function(item, index) {
+                var div = document.createElement('div');
+                div.className = 'ranking-item';
+                div.innerHTML = '<div class="ranking-rank">#' + (index + 1) + '</div>' +
+                    '<div class="ranking-name">' + item[0] + '</div>' +
+                    '<div class="ranking-value">$' + (item[1] / 1000000).toFixed(1) + 'M</div>';
+                topDiv.appendChild(div);
+            });
 
-            // Growth leaders
-            const growth = Object.entries(dashboardData.branches)
-                .map(([name, val20]) => ({
-                    name,
-                    growth: ((val20 - (dashboardData.may19[name] || val20)) / (dashboardData.may19[name] || val20)) * 100
-                }))
-                .sort((a, b) => b.growth - a.growth)
-                .slice(0, 10);
+            var growth = Object.entries(dashboardData.branches).map(function(item) {
+                var name = item[0];
+                var val20 = item[1];
+                var val19 = dashboardData.may19[name] || val20;
+                var pct = val19 > 0 ? ((val20 - val19) / val19) * 100 : 0;
+                return { name: name, growth: pct };
+            }).sort(function(a, b) { return b.growth - a.growth; }).slice(0, 10);
 
-            document.getElementById('growthRanking').innerHTML = growth.map((item, i) => `
-                <div class="ranking-item">
-                    <div class="ranking-rank">#${i + 1}</div>
-                    <div class="ranking-name">${item.name}</div>
-                    <div class="ranking-value">${item.growth.toFixed(1)}%</div>
-                </div>
-            `).join('');
+            growth.forEach(function(item, index) {
+                var div = document.createElement('div');
+                div.className = 'ranking-item';
+                div.innerHTML = '<div class="ranking-rank">#' + (index + 1) + '</div>' +
+                    '<div class="ranking-name">' + item.name + '</div>' +
+                    '<div class="ranking-value">' + item.growth.toFixed(1) + '%</div>';
+                growthDiv.appendChild(div);
+            });
         }
 
-        // Initialize when ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                createChart();
-                populateRankings();
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(initChart, 100);
+                initRankings();
             });
         } else {
-            createChart();
-            populateRankings();
+            setTimeout(initChart, 100);
+            initRankings();
         }
     </script>
 </body>
