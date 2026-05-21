@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>May Shipping Totals Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -108,8 +108,8 @@
             border: 2px solid #00d4ff;
             border-radius: 8px;
             padding: 15px;
-            flex: 0.6;
-            min-height: 300px;
+            flex: 1;
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -123,20 +123,18 @@
             flex-shrink: 0;
         }
 
-        .chart-wrapper {
+        .chart-canvas-container {
             flex: 1;
             position: relative;
-            min-height: 0;
-            overflow: hidden;
+            min-height: 250px;
         }
 
         .ranking-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            flex: 0.4;
-            min-height: 200px;
             flex-shrink: 0;
+            max-height: 250px;
         }
 
         .ranking-table {
@@ -166,7 +164,7 @@
 
         .ranking-item {
             display: grid;
-            grid-template-columns: 25px 1fr 70px;
+            grid-template-columns: 25px 1fr 60px;
             gap: 8px;
             padding: 5px 0;
             border-bottom: 1px solid #2a2f3e;
@@ -255,17 +253,19 @@
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">May Projection</div>
-                    <div class="metric-value">$51.2M</div>
+                    <div class="metric-value">$45.9M</div>
+                    <div class="metric-subtext">(Month Complete)</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">Annual Run Rate</div>
-                    <div class="metric-value">$91.4M</div>
+                    <div class="metric-value">$550.8M</div>
+                    <div class="metric-subtext">Full Year</div>
                 </div>
             </div>
 
             <div class="chart-section">
                 <div class="chart-title">All 21 Branches - Shipping by Volume</div>
-                <div class="chart-wrapper">
+                <div class="chart-canvas-container">
                     <canvas id="shippingChart"></canvas>
                 </div>
             </div>
@@ -288,7 +288,6 @@
     </div>
 
     <script>
-        // Dashboard data
         const dashboardData = {
             branches: {
                 'OLC': 11078552.36,
@@ -338,26 +337,25 @@
             }
         };
 
-        // Initialize chart when document is ready
         function initChart() {
-            const canvasEl = document.getElementById('shippingChart');
-            if (!canvasEl) {
-                console.error('Canvas element not found');
-                return;
-            }
+            setTimeout(function() {
+                const canvasEl = document.getElementById('shippingChart');
+                if (!canvasEl) {
+                    console.error('Canvas element not found');
+                    return;
+                }
 
-            const ctx = canvasEl.getContext('2d');
-            if (!ctx) {
-                console.error('Could not get 2d context');
-                return;
-            }
+                const ctx = canvasEl.getContext('2d');
+                if (!ctx) {
+                    console.error('Could not get 2d context');
+                    return;
+                }
 
-            const labels = Object.keys(dashboardData.branches);
-            const data = Object.values(dashboardData.branches);
+                const labels = Object.keys(dashboardData.branches);
+                const data = Object.values(dashboardData.branches);
 
-            try {
                 new Chart(ctx, {
-                    type: 'barh',
+                    type: 'bar',
                     data: {
                         labels: labels,
                         datasets: [{
@@ -365,16 +363,23 @@
                             data: data,
                             backgroundColor: '#00d4ff',
                             borderColor: '#00a3b3',
-                            borderWidth: 0
+                            borderWidth: 0,
+                            borderRadius: 4
                         }]
                     },
                     options: {
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
+                        layout: {
+                            padding: 0
+                        },
                         plugins: {
                             legend: { display: false },
                             tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#00d4ff',
+                                bodyColor: '#e0e0e0',
                                 callbacks: {
                                     label: function(context) {
                                         return '$' + context.parsed.x.toLocaleString('en-US', {maximumFractionDigits: 0});
@@ -384,30 +389,27 @@
                         },
                         scales: {
                             x: {
-                                ticks: { color: '#888', font: { size: 10 } },
-                                grid: { color: '#2a2f3e', drawBorder: false },
-                                callbacks: {
-                                    label: function(context) {
-                                        return '$' + (context.value / 1000000).toFixed(1) + 'M';
+                                beginAtZero: true,
+                                ticks: { 
+                                    color: '#888', 
+                                    font: { size: 10 },
+                                    callback: function(value) {
+                                        return '$' + (value / 1000000).toFixed(1) + 'M';
                                     }
-                                }
+                                },
+                                grid: { color: '#2a2f3e' }
                             },
                             y: {
                                 ticks: { color: '#888', font: { size: 10 } },
-                                grid: { display: false },
-                                border: { display: false }
+                                grid: { display: false }
                             }
                         }
                     }
                 });
-            } catch (error) {
-                console.error('Chart initialization error:', error);
-            }
+            }, 100);
         }
 
-        // Populate rankings
         function initRankings() {
-            // Top 15 by total
             const topRankingDiv = document.getElementById('topRanking');
             const sorted = Object.entries(dashboardData.branches)
                 .sort((a, b) => b[1] - a[1])
@@ -424,7 +426,6 @@
                 topRankingDiv.appendChild(div);
             });
 
-            // Growth leaders
             const growthRankingDiv = document.getElementById('growthRanking');
             const growth = Object.entries(dashboardData.branches).map(([name, val20]) => {
                 const val19 = dashboardData.may19[name] || val20;
@@ -444,7 +445,6 @@
             });
         }
 
-        // Run initialization
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
                 initChart();
