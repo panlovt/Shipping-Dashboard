@@ -249,7 +249,7 @@
             <div class="metric-card">
                 <h3>Total MTD Shipping</h3>
                 <div class="value" id="totalShipping">$0</div>
-                <div class="subtitle">May 1-21</div>
+                <div class="subtitle">May 1-22</div>
             </div>
             <div class="metric-card">
                 <h3>Top Performing Branch</h3>
@@ -270,7 +270,7 @@
             <div class="metric-card">
                 <h3>May Projection</h3>
                 <div class="value" id="mayProjection">$0</div>
-                <div class="context">6 days remaining</div>
+                <div class="context">5 days remaining</div>
             </div>
             <div class="metric-card">
                 <h3>Annual Run Rate</h3>
@@ -290,13 +290,36 @@
         </div>
 
         <footer>
-            <p>Last updated: <span id="footerTime"></span> | Data through May 21, 2026 (14 working days)</p>
+            <p>Last updated: <span id="footerTime"></span> | Data through May 22, 2026 (15 working days)</p>
         </footer>
     </div>
 
     <script>
         const dashboardData = {
             currentMTD: [
+                {branch: 'OLC', amount: 11733232.015715254},
+                {branch: 'Santa Monica', amount: 4564782.438991049},
+                {branch: 'Minneapolis', amount: 4120533.61089213},
+                {branch: 'Malaysia', amount: 2940972.4164445773},
+                {branch: 'Santa Clara', amount: 2802517.181587331},
+                {branch: 'Long Island', amount: 2798714.672762558},
+                {branch: 'Tampa', amount: 2637214.1484585344},
+                {branch: 'Hong Kong', amount: 2225545.935680032},
+                {branch: 'Milwaukee', amount: 2088655.5410801875},
+                {branch: 'Miami', amount: 1873902.4296539892},
+                {branch: 'Phoenix', amount: 1374377.0553622656},
+                {branch: 'Toronto', amount: 1319765.2615849634},
+                {branch: 'AMAT', amount: 1290138.6485289466},
+                {branch: 'Master Web Orders', amount: 1068741.4113275036},
+                {branch: 'Seattle', amount: 1043527.7756199837},
+                {branch: 'Montreal', amount: 852404.6973736286},
+                {branch: 'Vancouver', amount: 818064.7896201257},
+                {branch: 'Chicago', amount: 656043.4337360933},
+                {branch: 'Mexico', amount: 458519.4754933268},
+                {branch: 'Special', amount: 342034.9344927445},
+                {branch: 'E-Sonic Web Orders', amount: 125421.48335647711}
+            ],
+            previousMTD: [
                 {branch: 'OLC', amount: 11078552.358358452},
                 {branch: 'Santa Monica', amount: 4204394.192720035},
                 {branch: 'Minneapolis', amount: 3763007.6218743827},
@@ -319,42 +342,19 @@
                 {branch: 'Special', amount: 247163.19666544348},
                 {branch: 'E-Sonic Web Orders', amount: 115933.93504905826}
             ],
-            previousMTD: [
-                {branch: 'OLC', amount: 11078552.36},
-                {branch: 'Santa Monica', amount: 4204394.19},
-                {branch: 'Minneapolis', amount: 3763007.62},
-                {branch: 'Malaysia', amount: 2764181.36},
-                {branch: 'Santa Clara', amount: 2668503.51},
-                {branch: 'Tampa', amount: 2548072.75},
-                {branch: 'Long Island', amount: 2495286.94},
-                {branch: 'Hong Kong', amount: 2040922.25},
-                {branch: 'Milwaukee', amount: 1956760.25},
-                {branch: 'Miami', amount: 1749479.06},
-                {branch: 'Toronto', amount: 1249143.68},
-                {branch: 'AMAT', amount: 1247068.98},
-                {branch: 'Phoenix', amount: 1240473.58},
-                {branch: 'Master Web Orders', amount: 1008058.96},
-                {branch: 'Seattle', amount: 963205.50},
-                {branch: 'Montreal', amount: 804639.51},
-                {branch: 'Vancouver', amount: 767990.49},
-                {branch: 'Chicago', amount: 648368.48},
-                {branch: 'Mexico', amount: 428243.90},
-                {branch: 'Special', amount: 247163.20},
-                {branch: 'E-Sonic Web Orders', amount: 115933.94}
-            ],
             fastestGrowing: {
-                branch: 'Mexico',
-                growthPercent: 25.65
+                branch: 'Special',
+                growthPercent: 38.39
             },
             biggestClimber: {
-                branch: 'Tampa',
-                rankChange: 1,
-                previousRank: 7,
-                currentRank: 6
+                branch: 'Phoenix',
+                rankChange: 2,
+                previousRank: 13,
+                currentRank: 11
             },
             projectionMetrics: {
-                businessDaysElapsed: 14,
-                businessDaysRemainingInMay: 6,
+                businessDaysElapsed: 15,
+                businessDaysRemainingInMay: 5,
                 businessDaysInYear: 253
             }
         };
@@ -398,7 +398,7 @@
 
             // Biggest Climber
             document.getElementById('biggestClimber').textContent = dashboardData.biggestClimber.branch;
-            document.getElementById('climberRank').textContent = `↑ ${dashboardData.biggestClimber.rankChange} spot (#${dashboardData.biggestClimber.previousRank} → #${dashboardData.biggestClimber.currentRank})`;
+            document.getElementById('climberRank').textContent = `↑ ${dashboardData.biggestClimber.rankChange} spots (#${dashboardData.biggestClimber.previousRank} → #${dashboardData.biggestClimber.currentRank})`;
 
             // Projections
             const dailyPace = total / dashboardData.projectionMetrics.businessDaysElapsed;
