@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>May Shipping Totals Dashboard</title>
+    <title>May Shipping & GP% Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
     <style>
         * {
@@ -105,15 +105,9 @@
             margin-top: 4px;
         }
 
-        .metric-card .growth-context {
-            font-size: 0.7em;
-            color: #666;
-            margin-top: 1px;
-        }
-
         .content-area {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1.4fr 1fr 1fr;
             gap: 12px;
             flex: 1;
             min-height: 0;
@@ -135,6 +129,13 @@
             min-height: 0;
         }
 
+        .chart-title {
+            color: #00d4ff;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
         .ranking-container {
             background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
             padding: 15px;
@@ -144,19 +145,28 @@
             border: 1px solid #00d4ff;
         }
 
+        .ranking-container.gp {
+            border-color: #00ff99;
+            box-shadow: 0 4px 15px rgba(0, 255, 153, 0.1);
+        }
+
         .ranking-container h2 {
             color: #00d4ff;
             margin-bottom: 12px;
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 600;
+        }
+
+        .ranking-container.gp h2 {
+            color: #00ff99;
         }
 
         .rank-item {
             display: flex;
             align-items: center;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #2a3a4a;
-            font-size: 0.95em;
+            font-size: 0.85em;
         }
 
         .rank-item:last-child {
@@ -166,42 +176,35 @@
         .rank-num {
             font-weight: bold;
             color: #00d4ff;
-            min-width: 25px;
-            font-size: 1em;
+            min-width: 20px;
+            font-size: 0.95em;
+        }
+
+        .ranking-container.gp .rank-num {
+            color: #00ff99;
         }
 
         .rank-name {
             flex: 1;
-            padding: 0 10px;
+            padding: 0 8px;
             font-weight: 500;
             color: #ffffff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 0.9em;
         }
 
         .rank-amount {
             text-align: right;
             font-weight: bold;
             color: #00ff99;
-            min-width: 80px;
+            min-width: 70px;
+            font-size: 0.9em;
         }
 
-        .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-left: 6px;
-            flex-shrink: 0;
-            box-shadow: 0 0 8px currentColor;
-        }
-
-        .indicator.above {
-            background: #00ff99;
-        }
-
-        .indicator.below {
-            background: #ff6b6b;
+        .ranking-container.gp .rank-amount {
+            color: #ffd700;
         }
 
         footer {
@@ -227,6 +230,10 @@
             border-radius: 3px;
         }
 
+        .ranking-container.gp::-webkit-scrollbar-thumb {
+            background: #00ff99;
+        }
+
         .ranking-container::-webkit-scrollbar-thumb:hover {
             background: #00ffff;
         }
@@ -234,6 +241,9 @@
         @media (max-width: 1400px) {
             .metrics-row {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            .content-area {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -260,7 +270,7 @@
                 <h3>🔥 Hottest Branch</h3>
                 <div class="value" id="fastestGrowing">—</div>
                 <div class="growth-percent" id="fastestGrowingPercent">+0%</div>
-                <div class="growth-context">vs Yesterday</div>
+                <div class="context">vs Yesterday</div>
             </div>
             <div class="metric-card">
                 <h3>📈 Biggest Climber</h3>
@@ -281,11 +291,18 @@
 
         <div class="content-area">
             <div class="chart-container">
+                <div class="chart-title">Branch Performance Overview</div>
                 <canvas id="shippingChart"></canvas>
             </div>
+
             <div class="ranking-container">
                 <h2>Top 15 Branches</h2>
                 <div id="topRanking"></div>
+            </div>
+
+            <div class="ranking-container gp">
+                <h2>Top 15 by GP%</h2>
+                <div id="gpRanking"></div>
             </div>
         </div>
 
@@ -342,6 +359,29 @@
                 {branch: 'Special', amount: 247163.19666544348},
                 {branch: 'E-Sonic Web Orders', amount: 115933.93504905826}
             ],
+            gpData: [
+                {branch: 'E-Sonic Web Orders', gp_pct: 0.4188},
+                {branch: 'Master Web Orders', gp_pct: 0.3835},
+                {branch: 'OLC', gp_pct: 0.3620},
+                {branch: 'Vancouver', gp_pct: 0.3406},
+                {branch: 'Montreal', gp_pct: 0.3358},
+                {branch: 'Toronto', gp_pct: 0.3196},
+                {branch: 'Seattle', gp_pct: 0.3080},
+                {branch: 'Hong Kong', gp_pct: 0.3062},
+                {branch: 'Malaysia', gp_pct: 0.3057},
+                {branch: 'Phoenix', gp_pct: 0.2924},
+                {branch: 'Santa Clara', gp_pct: 0.2889},
+                {branch: 'Long Island', gp_pct: 0.2897},
+                {branch: 'Minneapolis', gp_pct: 0.2774},
+                {branch: 'AMAT', gp_pct: 0.2644},
+                {branch: 'Tampa', gp_pct: 0.2615},
+                {branch: 'Milwaukee', gp_pct: 0.2461},
+                {branch: 'Chicago', gp_pct: 0.3181},
+                {branch: 'Santa Monica', gp_pct: 0.2904},
+                {branch: 'Miami', gp_pct: 0.3497},
+                {branch: 'Mexico', gp_pct: 0.1808},
+                {branch: 'Special', gp_pct: 0.1588}
+            ],
             fastestGrowing: {
                 branch: 'Special',
                 growthPercent: 38.39
@@ -366,6 +406,7 @@
             calculateMetrics();
             renderChart();
             renderTopRanking();
+            renderGPRanking();
         }
 
         function updateTimestamp() {
@@ -387,20 +428,16 @@
             const total = dashboardData.currentMTD.reduce((sum, item) => sum + item.amount, 0);
             const topBranch = dashboardData.currentMTD[0];
 
-            // Current metrics
             document.getElementById('totalShipping').textContent = '$' + (total / 1000000).toFixed(1) + 'M';
             document.getElementById('topBranch').textContent = topBranch.branch;
             document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
 
-            // Hottest Branch
             document.getElementById('fastestGrowing').textContent = dashboardData.fastestGrowing.branch;
             document.getElementById('fastestGrowingPercent').textContent = '+' + dashboardData.fastestGrowing.growthPercent.toFixed(2) + '%';
 
-            // Biggest Climber
             document.getElementById('biggestClimber').textContent = dashboardData.biggestClimber.branch;
             document.getElementById('climberRank').textContent = `↑ ${dashboardData.biggestClimber.rankChange} spots (#${dashboardData.biggestClimber.previousRank} → #${dashboardData.biggestClimber.currentRank})`;
 
-            // Projections
             const dailyPace = total / dashboardData.projectionMetrics.businessDaysElapsed;
             const mayProjection = total + (dailyPace * dashboardData.projectionMetrics.businessDaysRemainingInMay);
             const annualRunRate = dailyPace * dashboardData.projectionMetrics.businessDaysInYear;
@@ -436,13 +473,6 @@
                     plugins: {
                         legend: {
                             display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Branch Performance Overview',
-                            font: {size: 13, weight: 'bold', color: '#00d4ff'},
-                            color: '#00d4ff',
-                            padding: 10
                         }
                     },
                     scales: {
@@ -451,7 +481,7 @@
                                 callback: function(value) {
                                     return '$' + value + 'M';
                                 },
-                                font: {size: 11},
+                                font: {size: 10},
                                 color: '#888'
                             },
                             grid: {
@@ -460,7 +490,7 @@
                         },
                         y: {
                             ticks: {
-                                font: {size: 10},
+                                font: {size: 9},
                                 color: '#888'
                             },
                             grid: {
@@ -475,17 +505,30 @@
         function renderTopRanking() {
             const top15 = dashboardData.currentMTD.slice(0, 15);
             const html = top15.map((branch, index) => {
-                const isTop = index < 5;
                 return `
                     <div class="rank-item">
                         <div class="rank-num">${index + 1}</div>
                         <div class="rank-name">${branch.branch}</div>
                         <div class="rank-amount">$${(branch.amount / 1000000).toFixed(2)}M</div>
-                        <div class="indicator ${isTop ? 'above' : 'below'}"></div>
                     </div>
                 `;
             }).join('');
             document.getElementById('topRanking').innerHTML = html;
+        }
+
+        function renderGPRanking() {
+            const sorted = [...dashboardData.gpData].sort((a, b) => b.gp_pct - a.gp_pct);
+            const top15 = sorted.slice(0, 15);
+            const html = top15.map((branch, index) => {
+                return `
+                    <div class="rank-item">
+                        <div class="rank-num">${index + 1}</div>
+                        <div class="rank-name">${branch.branch}</div>
+                        <div class="rank-amount">${(branch.gp_pct * 100).toFixed(1)}%</div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('gpRanking').innerHTML = html;
         }
 
         document.addEventListener('DOMContentLoaded', initDashboard);
