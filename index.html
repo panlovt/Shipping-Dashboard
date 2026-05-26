@@ -11,13 +11,11 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         html, body {
             width: 100%;
             height: 100vh;
             overflow: hidden;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0f1419;
@@ -25,7 +23,6 @@
             display: flex;
             flex-direction: column;
         }
-
         .container {
             width: 100%;
             height: 100%;
@@ -33,7 +30,6 @@
             flex-direction: column;
             padding: 15px;
         }
-
         header {
             text-align: center;
             margin-bottom: 12px;
@@ -41,7 +37,6 @@
             border-bottom: 3px solid #00d4ff;
             flex-shrink: 0;
         }
-
         h1 {
             font-size: 2.8em;
             color: #00d4ff;
@@ -49,12 +44,10 @@
             font-weight: 700;
             letter-spacing: 1px;
         }
-
         .timestamp {
             font-size: 1.1em;
             color: #888;
         }
-
         .metrics-row {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -62,7 +55,6 @@
             margin-bottom: 15px;
             flex-shrink: 0;
         }
-
         .metric-card {
             background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
             padding: 15px;
@@ -71,7 +63,6 @@
             text-align: center;
             border: 1px solid #00d4ff;
         }
-
         .metric-card h3 {
             color: #00d4ff;
             font-size: 0.95em;
@@ -80,39 +71,34 @@
             margin-bottom: 6px;
             font-weight: 600;
         }
-
         .metric-card .value {
             font-size: 2.2em;
             font-weight: bold;
             color: #ffffff;
             margin-bottom: 3px;
         }
-
         .metric-card .subtitle {
             font-size: 0.9em;
             color: #888;
         }
-
         .metric-card .context {
             font-size: 0.85em;
             color: #666;
             margin-top: 2px;
         }
-
         .metric-card .growth-percent {
             font-size: 1.1em;
             color: #00ff99;
             margin-top: 4px;
         }
-
         .content-area {
             display: grid;
             grid-template-columns: 1.4fr 1fr 1fr;
             gap: 12px;
             flex: 1;
             min-height: 0;
+            overflow: hidden;
         }
-
         .chart-container {
             background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
             padding: 15px;
@@ -120,22 +106,21 @@
             box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1);
             display: flex;
             flex-direction: column;
-            min-height: 0;
             border: 1px solid #00d4ff;
-        }
-
-        .chart-container canvas {
-            flex: 1;
             min-height: 0;
+            overflow: hidden;
         }
-
+        .chart-container > canvas {
+            flex: 1;
+            max-height: 100%;
+        }
         .chart-title {
             color: #00d4ff;
             font-size: 1.15em;
             font-weight: 600;
             margin-bottom: 10px;
+            flex-shrink: 0;
         }
-
         .ranking-container {
             background: linear-gradient(135deg, #1a2332 0%, #141b28 100%);
             padding: 15px;
@@ -143,24 +128,24 @@
             box-shadow: 0 4px 15px rgba(0, 212, 255, 0.1);
             overflow-y: auto;
             border: 1px solid #00d4ff;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
-
         .ranking-container.gp {
             border-color: #00ff99;
             box-shadow: 0 4px 15px rgba(0, 255, 153, 0.1);
         }
-
         .ranking-container h2 {
             color: #00d4ff;
             margin-bottom: 12px;
             font-size: 1.25em;
             font-weight: 600;
+            flex-shrink: 0;
         }
-
         .ranking-container.gp h2 {
             color: #00ff99;
         }
-
         .rank-item {
             display: flex;
             align-items: center;
@@ -168,22 +153,18 @@
             border-bottom: 1px solid #2a3a4a;
             font-size: 1.05em;
         }
-
         .rank-item:last-child {
             border-bottom: none;
         }
-
         .rank-num {
             font-weight: bold;
             color: #00d4ff;
             min-width: 20px;
             font-size: 1.15em;
         }
-
         .ranking-container.gp .rank-num {
             color: #00ff99;
         }
-
         .rank-name {
             flex: 1;
             padding: 0 8px;
@@ -194,7 +175,6 @@
             text-overflow: ellipsis;
             font-size: 1.05em;
         }
-
         .rank-amount {
             text-align: right;
             font-weight: bold;
@@ -202,11 +182,9 @@
             min-width: 70px;
             font-size: 1.05em;
         }
-
         .ranking-container.gp .rank-amount {
             color: #ffd700;
         }
-
         footer {
             text-align: center;
             color: #666;
@@ -216,28 +194,22 @@
             border-top: 1px solid #2a3a4a;
             flex-shrink: 0;
         }
-
         .ranking-container::-webkit-scrollbar {
             width: 6px;
         }
-
         .ranking-container::-webkit-scrollbar-track {
             background: #1a2332;
         }
-
         .ranking-container::-webkit-scrollbar-thumb {
             background: #00d4ff;
             border-radius: 3px;
         }
-
         .ranking-container.gp::-webkit-scrollbar-thumb {
             background: #00ff99;
         }
-
         .ranking-container::-webkit-scrollbar-thumb:hover {
             background: #00ffff;
         }
-
         @media (max-width: 1400px) {
             .metrics-row {
                 grid-template-columns: repeat(3, 1fr);
@@ -254,12 +226,11 @@
             <h1>📊 May Shipping Totals Dashboard</h1>
             <div class="timestamp" id="timestamp"></div>
         </header>
-
         <div class="metrics-row">
             <div class="metric-card">
                 <h3>Total MTD Shipping</h3>
                 <div class="value" id="totalShipping">$0</div>
-                <div class="subtitle">May 1-22</div>
+                <div class="subtitle">May 1-26</div>
             </div>
             <div class="metric-card">
                 <h3>Top Performing Branch</h3>
@@ -270,7 +241,7 @@
                 <h3>🔥 Hottest Branch</h3>
                 <div class="value" id="fastestGrowing">—</div>
                 <div class="growth-percent" id="fastestGrowingPercent">+0%</div>
-                <div class="context">vs Yesterday</div>
+                <div class="context" id="fastestContext">vs Yesterday</div>
             </div>
             <div class="metric-card">
                 <h3>📈 Biggest Climber</h3>
@@ -280,7 +251,7 @@
             <div class="metric-card">
                 <h3>May Projection</h3>
                 <div class="value" id="mayProjection">$0</div>
-                <div class="context">5 days remaining</div>
+                <div class="context">4 days remaining</div>
             </div>
             <div class="metric-card">
                 <h3>Annual Run Rate</h3>
@@ -288,119 +259,102 @@
                 <div class="context">at current pace</div>
             </div>
         </div>
-
         <div class="content-area">
             <div class="chart-container">
                 <div class="chart-title">Branch Performance Overview</div>
                 <canvas id="shippingChart"></canvas>
             </div>
-
             <div class="ranking-container">
                 <h2>Top 15 Branches</h2>
                 <div id="topRanking"></div>
             </div>
-
             <div class="ranking-container gp">
                 <h2>Top 15 by GP%</h2>
                 <div id="gpRanking"></div>
             </div>
         </div>
-
         <footer>
-            <p>Last updated: <span id="footerTime"></span> | Data through May 22, 2026 (15 working days)</p>
+            <p>Last updated: <span id="footerTime"></span> | Data through May 26, 2026 (16 working days)</p>
         </footer>
     </div>
-
     <script>
         const dashboardData = {
             currentMTD: [
-                {branch: 'OLC', amount: 11733232.015715254},
-                {branch: 'Santa Monica', amount: 4564782.438991049},
-                {branch: 'Minneapolis', amount: 4120533.61089213},
-                {branch: 'Malaysia', amount: 2940972.4164445773},
-                {branch: 'Santa Clara', amount: 2802517.181587331},
-                {branch: 'Long Island', amount: 2798714.672762558},
-                {branch: 'Tampa', amount: 2637214.1484585344},
-                {branch: 'Hong Kong', amount: 2225545.935680032},
-                {branch: 'Milwaukee', amount: 2088655.5410801875},
-                {branch: 'Miami', amount: 1873902.4296539892},
-                {branch: 'Phoenix', amount: 1374377.0553622656},
-                {branch: 'Toronto', amount: 1319765.2615849634},
-                {branch: 'AMAT', amount: 1290138.6485289466},
-                {branch: 'Master Web Orders', amount: 1068741.4113275036},
-                {branch: 'Seattle', amount: 1043527.7756199837},
-                {branch: 'Montreal', amount: 852404.6973736286},
-                {branch: 'Vancouver', amount: 818064.7896201257},
-                {branch: 'Chicago', amount: 656043.4337360933},
-                {branch: 'Mexico', amount: 458519.4754933268},
-                {branch: 'Special', amount: 342034.9344927445},
-                {branch: 'E-Sonic Web Orders', amount: 125421.48335647711}
+                {branch: 'OLC', amount: 12521592.51, gp_pct: 0.3645},
+                {branch: 'Santa Monica', amount: 4931757.47, gp_pct: 0.2900},
+                {branch: 'Minneapolis', amount: 4599029.93, gp_pct: 0.2753},
+                {branch: 'Malaysia', amount: 3176796.83, gp_pct: 0.3041},
+                {branch: 'Santa Clara', amount: 3114161.37, gp_pct: 0.2892},
+                {branch: 'Long Island', amount: 3073679.74, gp_pct: 0.2894},
+                {branch: 'Tampa', amount: 2878342.96, gp_pct: 0.2657},
+                {branch: 'Hong Kong', amount: 2478730.52, gp_pct: 0.3075},
+                {branch: 'Milwaukee', amount: 2168826.23, gp_pct: 0.2481},
+                {branch: 'Miami', amount: 2025239.60, gp_pct: 0.3482},
+                {branch: 'Phoenix', amount: 1526668.09, gp_pct: 0.2944},
+                {branch: 'Toronto', amount: 1393826.69, gp_pct: 0.3231},
+                {branch: 'AMAT', amount: 1336318.52, gp_pct: 0.2606},
+                {branch: 'Master Web Orders', amount: 1134600.79, gp_pct: 0.3836},
+                {branch: 'Seattle', amount: 1103682.61, gp_pct: 0.3103},
+                {branch: 'Montreal', amount: 922842.04, gp_pct: 0.3335},
+                {branch: 'Vancouver', amount: 887070.80, gp_pct: 0.3378},
+                {branch: 'Chicago', amount: 716225.10, gp_pct: 0.3130},
+                {branch: 'Mexico', amount: 497681.22, gp_pct: 0.1896},
+                {branch: 'Special', amount: 342034.93, gp_pct: 0.1588},
+                {branch: 'E-Sonic Web Orders', amount: 137127.16, gp_pct: 0.4236}
             ],
             previousMTD: [
-                {branch: 'OLC', amount: 11078552.358358452},
-                {branch: 'Santa Monica', amount: 4204394.192720035},
-                {branch: 'Minneapolis', amount: 3763007.6218743827},
-                {branch: 'Malaysia', amount: 2764181.362426065},
-                {branch: 'Santa Clara', amount: 2668503.5057494566},
-                {branch: 'Tampa', amount: 2548072.7514700964},
-                {branch: 'Long Island', amount: 2495286.943889305},
-                {branch: 'Hong Kong', amount: 2040922.2485957742},
-                {branch: 'Milwaukee', amount: 1956760.2489733207},
-                {branch: 'Miami', amount: 1749479.0574139226},
-                {branch: 'Toronto', amount: 1249143.6774958742},
-                {branch: 'AMAT', amount: 1247068.9786719214},
-                {branch: 'Phoenix', amount: 1240473.5842957906},
-                {branch: 'Master Web Orders', amount: 1008058.9638458714},
-                {branch: 'Seattle', amount: 963205.4995126724},
-                {branch: 'Montreal', amount: 804639.5127914548},
-                {branch: 'Vancouver', amount: 767990.4878108148},
-                {branch: 'Chicago', amount: 648368.4839395359},
-                {branch: 'Mexico', amount: 428243.89564217627},
-                {branch: 'Special', amount: 247163.19666544348},
-                {branch: 'E-Sonic Web Orders', amount: 115933.93504905826}
+                {branch: 'OLC', amount: 11733232.01, gp_pct: 0.3620},
+                {branch: 'Santa Monica', amount: 4564782.44, gp_pct: 0.2904},
+                {branch: 'Minneapolis', amount: 4120533.61, gp_pct: 0.2774},
+                {branch: 'Malaysia', amount: 2940972.42, gp_pct: 0.3057},
+                {branch: 'Santa Clara', amount: 2802517.18, gp_pct: 0.2889},
+                {branch: 'Long Island', amount: 2798714.67, gp_pct: 0.2897},
+                {branch: 'Tampa', amount: 2637214.15, gp_pct: 0.2615},
+                {branch: 'Hong Kong', amount: 2225545.94, gp_pct: 0.3062},
+                {branch: 'Milwaukee', amount: 2088655.54, gp_pct: 0.2461},
+                {branch: 'Miami', amount: 1873902.43, gp_pct: 0.3497},
+                {branch: 'Phoenix', amount: 1374377.06, gp_pct: 0.2924},
+                {branch: 'Toronto', amount: 1319765.26, gp_pct: 0.3196},
+                {branch: 'AMAT', amount: 1290138.65, gp_pct: 0.2644},
+                {branch: 'Master Web Orders', amount: 1068741.41, gp_pct: 0.3835},
+                {branch: 'Seattle', amount: 1043527.78, gp_pct: 0.3080},
+                {branch: 'Montreal', amount: 852404.70, gp_pct: 0.3358},
+                {branch: 'Vancouver', amount: 818064.79, gp_pct: 0.3406},
+                {branch: 'Chicago', amount: 656043.43, gp_pct: 0.3181},
+                {branch: 'Mexico', amount: 458519.48, gp_pct: 0.1808},
+                {branch: 'Special', amount: 342034.93, gp_pct: 0.1588},
+                {branch: 'E-Sonic Web Orders', amount: 125421.48, gp_pct: 0.4188}
             ],
             gpData: [
-                {branch: 'E-Sonic Web Orders', gp_pct: 0.4188},
-                {branch: 'Master Web Orders', gp_pct: 0.3835},
-                {branch: 'OLC', gp_pct: 0.3620},
-                {branch: 'Vancouver', gp_pct: 0.3406},
-                {branch: 'Montreal', gp_pct: 0.3358},
-                {branch: 'Toronto', gp_pct: 0.3196},
-                {branch: 'Seattle', gp_pct: 0.3080},
-                {branch: 'Hong Kong', gp_pct: 0.3062},
-                {branch: 'Malaysia', gp_pct: 0.3057},
-                {branch: 'Phoenix', gp_pct: 0.2924},
-                {branch: 'Santa Clara', gp_pct: 0.2889},
-                {branch: 'Long Island', gp_pct: 0.2897},
-                {branch: 'Minneapolis', gp_pct: 0.2774},
-                {branch: 'AMAT', gp_pct: 0.2644},
-                {branch: 'Tampa', gp_pct: 0.2615},
-                {branch: 'Milwaukee', gp_pct: 0.2461},
-                {branch: 'Chicago', gp_pct: 0.3181},
-                {branch: 'Santa Monica', gp_pct: 0.2904},
-                {branch: 'Miami', gp_pct: 0.3497},
-                {branch: 'Mexico', gp_pct: 0.1808},
+                {branch: 'E-Sonic Web Orders', gp_pct: 0.4236},
+                {branch: 'Master Web Orders', gp_pct: 0.3836},
+                {branch: 'OLC', gp_pct: 0.3645},
+                {branch: 'Miami', gp_pct: 0.3482},
+                {branch: 'Vancouver', gp_pct: 0.3378},
+                {branch: 'Montreal', gp_pct: 0.3335},
+                {branch: 'Toronto', gp_pct: 0.3231},
+                {branch: 'Chicago', gp_pct: 0.3130},
+                {branch: 'Seattle', gp_pct: 0.3103},
+                {branch: 'Hong Kong', gp_pct: 0.3075},
+                {branch: 'Malaysia', gp_pct: 0.3041},
+                {branch: 'Phoenix', gp_pct: 0.2944},
+                {branch: 'Santa Monica', gp_pct: 0.2900},
+                {branch: 'Santa Clara', gp_pct: 0.2892},
+                {branch: 'Long Island', gp_pct: 0.2894},
+                {branch: 'Minneapolis', gp_pct: 0.2753},
+                {branch: 'Tampa', gp_pct: 0.2657},
+                {branch: 'AMAT', gp_pct: 0.2606},
+                {branch: 'Milwaukee', gp_pct: 0.2481},
+                {branch: 'Mexico', gp_pct: 0.1896},
                 {branch: 'Special', gp_pct: 0.1588}
             ],
-            fastestGrowing: {
-                branch: 'Special',
-                growthPercent: 38.39
-            },
-            biggestClimber: {
-                branch: 'Phoenix',
-                rankChange: 2,
-                previousRank: 13,
-                currentRank: 11
-            },
             projectionMetrics: {
-                businessDaysElapsed: 15,
-                businessDaysRemainingInMay: 5,
-                businessDaysInYear: 253
+                businessDaysElapsed: 16,
+                businessDaysRemainingInMay: 4,
+                businessDaysInYear: 252
             }
         };
-
         let chartInstance = null;
-
         function initDashboard() {
             updateTimestamp();
             calculateMetrics();
@@ -408,7 +362,6 @@
             renderTopRanking();
             renderGPRanking();
         }
-
         function updateTimestamp() {
             const now = new Date();
             const options = {
@@ -423,7 +376,6 @@
             document.getElementById('timestamp').textContent = timeString;
             document.getElementById('footerTime').textContent = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
         }
-
         function calculateMetrics() {
             const total = dashboardData.currentMTD.reduce((sum, item) => sum + item.amount, 0);
             const topBranch = dashboardData.currentMTD[0];
@@ -432,11 +384,46 @@
             document.getElementById('topBranch').textContent = topBranch.branch;
             document.getElementById('topAmount').textContent = '$' + (topBranch.amount / 1000000).toFixed(2) + 'M';
 
-            document.getElementById('fastestGrowing').textContent = dashboardData.fastestGrowing.branch;
-            document.getElementById('fastestGrowingPercent').textContent = '+' + dashboardData.fastestGrowing.growthPercent.toFixed(2) + '%';
+            // Calculate GP% improvements (Hottest Branch)
+            const gpImprovements = dashboardData.currentMTD.map(current => {
+                const previous = dashboardData.previousMTD.find(p => p.branch === current.branch);
+                const improvement = current.gp_pct - (previous ? previous.gp_pct : 0);
+                return {
+                    branch: current.branch,
+                    current_gp: current.gp_pct,
+                    previous_gp: previous ? previous.gp_pct : 0,
+                    improvement: improvement
+                };
+            }).sort((a, b) => b.improvement - a.improvement);
 
-            document.getElementById('biggestClimber').textContent = dashboardData.biggestClimber.branch;
-            document.getElementById('climberRank').textContent = `↑ ${dashboardData.biggestClimber.rankChange} spots (#${dashboardData.biggestClimber.previousRank} → #${dashboardData.biggestClimber.currentRank})`;
+            const hottestBranch = gpImprovements[0];
+            document.getElementById('fastestGrowing').textContent = hottestBranch.branch;
+            document.getElementById('fastestGrowingPercent').textContent = '+' + (hottestBranch.improvement * 100).toFixed(2) + '%';
+            document.getElementById('fastestContext').textContent = 'GP% Improvement';
+
+            // Calculate ranking movement (Biggest Climber) - top 15 only
+            const currentTop15 = dashboardData.currentMTD.slice(0, 15);
+            const previousTop15 = dashboardData.previousMTD.slice(0, 15);
+
+            const rankingMovements = currentTop15.map((current, currentIdx) => {
+                const previousIdx = previousTop15.findIndex(p => p.branch === current.branch);
+                const movement = previousIdx >= 0 ? previousIdx - currentIdx : -1;
+                return {
+                    branch: current.branch,
+                    previousRank: previousIdx >= 0 ? previousIdx + 1 : 'N/A',
+                    currentRank: currentIdx + 1,
+                    movement: movement
+                };
+            }).filter(item => item.movement > 0).sort((a, b) => b.movement - a.movement);
+
+            if (rankingMovements.length > 0) {
+                const climber = rankingMovements[0];
+                document.getElementById('biggestClimber').textContent = climber.branch;
+                document.getElementById('climberRank').textContent = `↑ ${climber.movement} spot${climber.movement !== 1 ? 's' : ''} (#${climber.previousRank} → #${climber.currentRank})`;
+            } else {
+                document.getElementById('biggestClimber').textContent = 'No movement';
+                document.getElementById('climberRank').textContent = 'All top 15 stable';
+            }
 
             const dailyPace = total / dashboardData.projectionMetrics.businessDaysElapsed;
             const mayProjection = total + (dailyPace * dashboardData.projectionMetrics.businessDaysRemainingInMay);
@@ -445,16 +432,18 @@
             document.getElementById('mayProjection').textContent = '$' + (mayProjection / 1000000).toFixed(1) + 'M';
             document.getElementById('annualRunRate').textContent = '$' + (annualRunRate / 1000000).toFixed(0) + 'M';
         }
-
         function renderChart() {
-            const ctx = document.getElementById('shippingChart').getContext('2d');
+            const ctx = document.getElementById('shippingChart');
+            if (!ctx) return;
+
+            const chartCtx = ctx.getContext('2d');
             const allBranches = dashboardData.currentMTD;
 
             if (chartInstance) {
                 chartInstance.destroy();
             }
 
-            chartInstance = new Chart(ctx, {
+            chartInstance = new Chart(chartCtx, {
                 type: 'bar',
                 data: {
                     labels: allBranches.map(b => b.branch),
@@ -501,7 +490,6 @@
                 }
             });
         }
-
         function renderTopRanking() {
             const top15 = dashboardData.currentMTD.slice(0, 15);
             const html = top15.map((branch, index) => {
@@ -515,10 +503,8 @@
             }).join('');
             document.getElementById('topRanking').innerHTML = html;
         }
-
         function renderGPRanking() {
-            const sorted = [...dashboardData.gpData].sort((a, b) => b.gp_pct - a.gp_pct);
-            const top15 = sorted.slice(0, 15);
+            const top15 = dashboardData.gpData.slice(0, 15);
             const html = top15.map((branch, index) => {
                 return `
                     <div class="rank-item">
@@ -530,7 +516,6 @@
             }).join('');
             document.getElementById('gpRanking').innerHTML = html;
         }
-
         document.addEventListener('DOMContentLoaded', initDashboard);
         setInterval(updateTimestamp, 60000);
     </script>
