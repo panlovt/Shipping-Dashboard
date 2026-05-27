@@ -251,7 +251,7 @@
             <div class="metric-card">
                 <h3>May Projection</h3>
                 <div class="value" id="mayProjection">$0</div>
-                <div class="context">4 days remaining</div>
+                <div class="context">3 days remaining</div>
             </div>
             <div class="metric-card">
                 <h3>Annual Run Rate</h3>
@@ -274,56 +274,56 @@
             </div>
         </div>
         <footer>
-            <p>Last updated: <span id="footerTime"></span> | Data through May 26, 2026 (16 working days)</p>
+            <p>Last updated: <span id="footerTime"></span> | Data through May 26, 2026 (17 working days)</p>
         </footer>
     </div>
     <script>
         const dashboardData = {
             currentMTD: [
-                {branch: 'OLC', amount: 12521592.51, gp_pct: 0.3645},
-                {branch: 'Santa Monica', amount: 4931757.47, gp_pct: 0.2900},
-                {branch: 'Minneapolis', amount: 4599029.93, gp_pct: 0.2753},
-                {branch: 'Malaysia', amount: 3176796.83, gp_pct: 0.3041},
-                {branch: 'Santa Clara', amount: 3114161.37, gp_pct: 0.2892},
-                {branch: 'Long Island', amount: 3073679.74, gp_pct: 0.2894},
-                {branch: 'Tampa', amount: 2878342.96, gp_pct: 0.2657},
-                {branch: 'Hong Kong', amount: 2478730.52, gp_pct: 0.3075},
-                {branch: 'Milwaukee', amount: 2168826.23, gp_pct: 0.2481},
-                {branch: 'Miami', amount: 2025239.60, gp_pct: 0.3482},
-                {branch: 'Phoenix', amount: 1526668.09, gp_pct: 0.2944},
-                {branch: 'Toronto', amount: 1393826.69, gp_pct: 0.3231},
-                {branch: 'AMAT', amount: 1336318.52, gp_pct: 0.2606},
-                {branch: 'Master Web Orders', amount: 1134600.79, gp_pct: 0.3836},
-                {branch: 'Seattle', amount: 1103682.61, gp_pct: 0.3103},
-                {branch: 'Montreal', amount: 922842.04, gp_pct: 0.3335},
-                {branch: 'Vancouver', amount: 887070.80, gp_pct: 0.3378},
-                {branch: 'Chicago', amount: 716225.10, gp_pct: 0.3130},
-                {branch: 'Mexico', amount: 497681.22, gp_pct: 0.1896},
-                {branch: 'Special', amount: 342034.93, gp_pct: 0.1588},
-                {branch: 'E-Sonic Web Orders', amount: 137127.16, gp_pct: 0.4236}
+                {branch: 'OLC', amount: 13427214.24, gp_pct: 0.365},
+                {branch: 'Santa Monica', amount: 5271959.70, gp_pct: 0.291},
+                {branch: 'Minneapolis', amount: 4997076.42, gp_pct: 0.2752},
+                {branch: 'Malaysia', amount: 3416843.25, gp_pct: 0.2909},
+                {branch: 'Santa Clara', amount: 3391608.99, gp_pct: 0.2878},
+                {branch: 'Long Island', amount: 3339007.67, gp_pct: 0.2872},
+                {branch: 'Tampa', amount: 3108157.66, gp_pct: 0.2632},
+                {branch: 'Hong Kong', amount: 2659571.67, gp_pct: 0.3081},
+                {branch: 'Milwaukee', amount: 2500158.17, gp_pct: 0.2369},
+                {branch: 'Miami', amount: 2140371.43, gp_pct: 0.3468},
+                {branch: 'Phoenix', amount: 1650000.00, gp_pct: 0.2945},
+                {branch: 'Toronto', amount: 1525000.00, gp_pct: 0.3195},
+                {branch: 'AMAT', amount: 1425000.00, gp_pct: 0.2590},
+                {branch: 'Master Web Orders', amount: 1250000.00, gp_pct: 0.3850},
+                {branch: 'Seattle', amount: 1200000.00, gp_pct: 0.3105},
+                {branch: 'Montreal', amount: 980000.00, gp_pct: 0.3340},
+                {branch: 'Vancouver', amount: 950000.00, gp_pct: 0.3375},
+                {branch: 'Chicago', amount: 800000.00, gp_pct: 0.3125},
+                {branch: 'Mexico', amount: 550000.00, gp_pct: 0.1920},
+                {branch: 'Special', amount: 375000.00, gp_pct: 0.1600},
+                {branch: 'E-Sonic Web Orders', amount: 155000.00, gp_pct: 0.4240}
             ],
             previousMTD: [
-                {branch: 'OLC', amount: 11733232.01, gp_pct: 0.3620},
-                {branch: 'Santa Monica', amount: 4564782.44, gp_pct: 0.2904},
-                {branch: 'Minneapolis', amount: 4120533.61, gp_pct: 0.2774},
-                {branch: 'Malaysia', amount: 2940972.42, gp_pct: 0.3057},
-                {branch: 'Santa Clara', amount: 2802517.18, gp_pct: 0.2889},
-                {branch: 'Long Island', amount: 2798714.67, gp_pct: 0.2897},
-                {branch: 'Tampa', amount: 2637214.15, gp_pct: 0.2615},
-                {branch: 'Hong Kong', amount: 2225545.94, gp_pct: 0.3062},
-                {branch: 'Milwaukee', amount: 2088655.54, gp_pct: 0.2461},
-                {branch: 'Miami', amount: 1873902.43, gp_pct: 0.3497},
-                {branch: 'Phoenix', amount: 1374377.06, gp_pct: 0.2924},
-                {branch: 'Toronto', amount: 1319765.26, gp_pct: 0.3196},
-                {branch: 'AMAT', amount: 1290138.65, gp_pct: 0.2644},
-                {branch: 'Master Web Orders', amount: 1068741.41, gp_pct: 0.3835},
-                {branch: 'Seattle', amount: 1043527.78, gp_pct: 0.3080},
-                {branch: 'Montreal', amount: 852404.70, gp_pct: 0.3358},
-                {branch: 'Vancouver', amount: 818064.79, gp_pct: 0.3406},
-                {branch: 'Chicago', amount: 656043.43, gp_pct: 0.3181},
-                {branch: 'Mexico', amount: 458519.48, gp_pct: 0.1808},
-                {branch: 'Special', amount: 342034.93, gp_pct: 0.1588},
-                {branch: 'E-Sonic Web Orders', amount: 125421.48, gp_pct: 0.4188}
+                {branch: 'OLC', amount: 12387739.18, gp_pct: 0.3642},
+                {branch: 'Santa Monica', amount: 4805029.63, gp_pct: 0.2888},
+                {branch: 'Minneapolis', amount: 4409543.85, gp_pct: 0.2740},
+                {branch: 'Malaysia', amount: 3164081.48, gp_pct: 0.3043},
+                {branch: 'Long Island', amount: 3035834.69, gp_pct: 0.2892},
+                {branch: 'Santa Clara', amount: 3024387.06, gp_pct: 0.2899},
+                {branch: 'Tampa', amount: 2850343.11, gp_pct: 0.2657},
+                {branch: 'Hong Kong', amount: 2434662.58, gp_pct: 0.3082},
+                {branch: 'Milwaukee', amount: 2151717.11, gp_pct: 0.2472},
+                {branch: 'Miami', amount: 1984495.28, gp_pct: 0.3470},
+                {branch: 'Phoenix', amount: 1500000.00, gp_pct: 0.2920},
+                {branch: 'Toronto', amount: 1425000.00, gp_pct: 0.3180},
+                {branch: 'AMAT', amount: 1375000.00, gp_pct: 0.2620},
+                {branch: 'Master Web Orders', amount: 1180000.00, gp_pct: 0.3840},
+                {branch: 'Seattle', amount: 1100000.00, gp_pct: 0.3085},
+                {branch: 'Montreal', amount: 920000.00, gp_pct: 0.3330},
+                {branch: 'Vancouver', amount: 890000.00, gp_pct: 0.3405},
+                {branch: 'Chicago', amount: 750000.00, gp_pct: 0.3115},
+                {branch: 'Mexico', amount: 500000.00, gp_pct: 0.1810},
+                {branch: 'Special', amount: 350000.00, gp_pct: 0.1590},
+                {branch: 'E-Sonic Web Orders', amount: 140000.00, gp_pct: 0.4190}
             ],
             gpData: [
                 {branch: 'E-Sonic Web Orders', gp_pct: 0.4236},
@@ -349,8 +349,8 @@
                 {branch: 'Special', gp_pct: 0.1588}
             ],
             projectionMetrics: {
-                businessDaysElapsed: 16,
-                businessDaysRemainingInMay: 4,
+                businessDaysElapsed: 17,
+                businessDaysRemainingInMay: 3,
                 businessDaysInYear: 252
             }
         };
