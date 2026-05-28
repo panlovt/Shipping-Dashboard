@@ -165,11 +165,11 @@
         }
 
         .bar-fill {
-            flex: 1;
             height: 20px;
             background: linear-gradient(90deg, #00bcd4, #00ff88);
             border-radius: 2px;
             position: relative;
+            flex-shrink: 0;
         }
 
         .bar-value {
@@ -191,6 +191,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 1.1em;
+            table-layout: fixed;
         }
 
         thead {
@@ -222,26 +223,27 @@
         .rank {
             color: #00bcd4;
             font-weight: 600;
-            width: 35px;
+            width: 15%;
+            text-align: center;
         }
 
         .branch-name {
             color: #ffffff;
-            flex: 1;
+            width: 55%;
         }
 
         .amount {
             text-align: right;
             color: #00ff88;
             font-weight: 600;
-            width: 80px;
+            width: 30%;
         }
 
         .gp-pct {
             text-align: right;
             color: #00ff88;
             font-weight: 600;
-            width: 60px;
+            width: 30%;
         }
 
         .footer {
@@ -258,8 +260,9 @@
         <div class="header">
             <div class="header-title">
                 <span class="icon">📊</span>
-                <h1>May Shipping Dashboard</h1>
+                <h1>May Shipping Totals Dashboard</h1>
             </div>
+            <div class="timestamp">Thu, May 28, 2026, 7:20 AM</div>
         </div>
 
         <div class="metrics-grid">
@@ -302,111 +305,111 @@
 
         <div class="content">
             <div class="card">
-                <div class="card-title">All 21 Branches by Shipping</div>
+                <div class="card-title">Branch Performance Overview</div>
                 <div class="bar-chart">
                     <div class="bar-item">
                         <div class="bar-label">OLC</div>
-                        <div class="bar-fill" style="width: 100%;"></div>
+                        <div class="bar-fill" style="width: 80%;"></div>
                         <div class="bar-value">$14.28M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Santa Monica</div>
-                        <div class="bar-fill" style="width: 39.7%;"></div>
+                        <div class="bar-fill" style="width: 31.7%;"></div>
                         <div class="bar-value">$5.66M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Minneapolis</div>
-                        <div class="bar-fill" style="width: 36.7%;"></div>
+                        <div class="bar-fill" style="width: 29.3%;"></div>
                         <div class="bar-value">$5.24M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Santa Clara</div>
-                        <div class="bar-fill" style="width: 25.9%;"></div>
+                        <div class="bar-fill" style="width: 20.7%;"></div>
                         <div class="bar-value">$3.69M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Long Island</div>
-                        <div class="bar-fill" style="width: 25.0%;"></div>
+                        <div class="bar-fill" style="width: 20%;"></div>
                         <div class="bar-value">$3.57M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Malaysia</div>
-                        <div class="bar-fill" style="width: 24.6%;"></div>
+                        <div class="bar-fill" style="width: 19.6%;"></div>
                         <div class="bar-value">$3.51M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Tampa</div>
-                        <div class="bar-fill" style="width: 22.7%;"></div>
+                        <div class="bar-fill" style="width: 18.1%;"></div>
                         <div class="bar-value">$3.24M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Hong Kong</div>
-                        <div class="bar-fill" style="width: 19.6%;"></div>
+                        <div class="bar-fill" style="width: 15.6%;"></div>
                         <div class="bar-value">$2.79M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Milwaukee</div>
-                        <div class="bar-fill" style="width: 18.4%;"></div>
+                        <div class="bar-fill" style="width: 14.7%;"></div>
                         <div class="bar-value">$2.63M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Miami</div>
-                        <div class="bar-fill" style="width: 15.5%;"></div>
+                        <div class="bar-fill" style="width: 12.4%;"></div>
                         <div class="bar-value">$2.22M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Phoenix</div>
-                        <div class="bar-fill" style="width: 12.2%;"></div>
+                        <div class="bar-fill" style="width: 9.7%;"></div>
                         <div class="bar-value">$1.74M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Toronto</div>
-                        <div class="bar-fill" style="width: 11.8%;"></div>
+                        <div class="bar-fill" style="width: 9.4%;"></div>
                         <div class="bar-value">$1.69M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">AMAT</div>
-                        <div class="bar-fill" style="width: 10.1%;"></div>
+                        <div class="bar-fill" style="width: 8.1%;"></div>
                         <div class="bar-value">$1.44M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Master Web</div>
-                        <div class="bar-fill" style="width: 8.9%;"></div>
+                        <div class="bar-fill" style="width: 7.1%;"></div>
                         <div class="bar-value">$1.27M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Seattle</div>
-                        <div class="bar-fill" style="width: 8.6%;"></div>
+                        <div class="bar-fill" style="width: 6.9%;"></div>
                         <div class="bar-value">$1.23M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Montreal</div>
-                        <div class="bar-fill" style="width: 7.9%;"></div>
+                        <div class="bar-fill" style="width: 6.3%;"></div>
                         <div class="bar-value">$1.12M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Vancouver</div>
-                        <div class="bar-fill" style="width: 7.8%;"></div>
+                        <div class="bar-fill" style="width: 6.2%;"></div>
                         <div class="bar-value">$1.11M</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Chicago</div>
-                        <div class="bar-fill" style="width: 5.4%;"></div>
+                        <div class="bar-fill" style="width: 4.3%;"></div>
                         <div class="bar-value">$771K</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Mexico</div>
-                        <div class="bar-fill" style="width: 3.9%;"></div>
+                        <div class="bar-fill" style="width: 3.1%;"></div>
                         <div class="bar-value">$551K</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">Special</div>
-                        <div class="bar-fill" style="width: 2.4%;"></div>
+                        <div class="bar-fill" style="width: 1.9%;"></div>
                         <div class="bar-value">$342K</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-label">E-Sonic Web</div>
-                        <div class="bar-fill" style="width: 1.0%;"></div>
+                        <div class="bar-fill" style="width: 0.8%;"></div>
                         <div class="bar-value">$150K</div>
                     </div>
                 </div>
