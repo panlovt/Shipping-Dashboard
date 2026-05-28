@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>May Shipping & GP% Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background-color: #0f1419;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 0px;
+        }
+
+        .header-title h1 {
+            font-size: 2.8em;
+            color: #00bcd4;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .icon {
+            font-size: 2.8em;
+        }
+
+        .timestamp {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .metric-card {
+            border: 2px solid #00bcd4;
+            border-radius: 4px;
+            padding: 8px 6px;
+            background-color: rgba(0, 188, 212, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background-color: rgba(0, 188, 212, 0.15);
+        }
+
+        .metric-label {
+            color: #00bcd4;
+            font-size: 0.8em;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .metric-value {
+            color: #ffffff;
+            font-size: 1.85em;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .metric-value.positive {
+            color: #00ff88;
+        }
+
+        .metric-subtext {
+            color: #aaa;
+            font-size: 0.75em;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 10px;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .card {
+            border: 2px solid #00bcd4;
+            border-radius: 4px;
+            background-color: rgba(0, 188, 212, 0.03);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card-title {
+            color: #00bcd4;
+            font-size: 1.0em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .bar-chart {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            gap: 6px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 26px;
+        }
+
+        .bar-label {
+            min-width: 80px;
+            font-size: 0.85em;
+            color: #aaa;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bar-fill {
+            flex: 1;
+            height: 20px;
+            background: linear-gradient(90deg, #00bcd4, #00ff88);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .bar-value {
+            min-width: 70px;
+            text-align: right;
+            font-size: 0.85em;
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.1em;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: rgba(0, 188, 212, 0.1);
+            border-bottom: 2px solid #00bcd4;
+            z-index: 10;
+        }
+
+        th {
+            padding: 6px 4px;
+            text-align: left;
+            color: #00bcd4;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        td {
+            padding: 5px 4px;
+            border-bottom: 1px solid rgba(0, 188, 212, 0.1);
+            color: #ffffff;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 188, 212, 0.05);
+        }
+
+        .rank {
+            color: #00bcd4;
+            font-weight: 600;
+            width: 35px;
+        }
+
+        .branch-name {
+            color: #ffffff;
+            flex: 1;
+        }
+
+        .amount {
+            text-align: right;
+            color: #00ff88;
+            font-weight: 600;
+            width: 80px;
+        }
+
+        .gp-pct {
+            text-align: right;
+            color: #00ff88;
+            font-weight: 600;
+            width: 60px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.85em;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <span class="icon">📊</span>
+                <h1>May Shipping Dashboard</h1>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Total MTD Shipping</div>
+                <div class="metric-value positive">$58.25M</div>
+                <div class="metric-subtext">May 1-27</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Top Performing Branch</div>
+                <div class="metric-value">OLC</div>
+                <div class="metric-subtext" style="color: #00ff88;">$14.28M</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">🔥 Hottest Branch</div>
+                <div class="metric-value">Chicago</div>
+                <div class="metric-subtext" style="color: #00ff88;">+3.52% GP%</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">📈 Biggest Climber</div>
+                <div class="metric-value">Seattle</div>
+                <div class="metric-subtext">Rank #17 → #15</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">May Projection</div>
+                <div class="metric-value positive">$64.72M</div>
+                <div class="metric-subtext">2 days remaining</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Annual Run Rate</div>
+                <div class="metric-value positive">$815.47M</div>
+                <div class="metric-subtext">at current pace</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <div class="card-title">All 21 Branches by Shipping</div>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">OLC</div>
+                        <div class="bar-fill" style="width: 100%;"></div>
+                        <div class="bar-value">$14.28M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Santa Monica</div>
+                        <div class="bar-fill" style="width: 39.7%;"></div>
+                        <div class="bar-value">$5.66M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Minneapolis</div>
+                        <div class="bar-fill" style="width: 36.7%;"></div>
+                        <div class="bar-value">$5.24M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Santa Clara</div>
+                        <div class="bar-fill" style="width: 25.9%;"></div>
+                        <div class="bar-value">$3.69M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Long Island</div>
+                        <div class="bar-fill" style="width: 25.0%;"></div>
+                        <div class="bar-value">$3.57M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Malaysia</div>
+                        <div class="bar-fill" style="width: 24.6%;"></div>
+                        <div class="bar-value">$3.51M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Tampa</div>
+                        <div class="bar-fill" style="width: 22.7%;"></div>
+                        <div class="bar-value">$3.24M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Hong Kong</div>
+                        <div class="bar-fill" style="width: 19.6%;"></div>
+                        <div class="bar-value">$2.79M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Milwaukee</div>
+                        <div class="bar-fill" style="width: 18.4%;"></div>
+                        <div class="bar-value">$2.63M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Miami</div>
+                        <div class="bar-fill" style="width: 15.5%;"></div>
+                        <div class="bar-value">$2.22M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Phoenix</div>
+                        <div class="bar-fill" style="width: 12.2%;"></div>
+                        <div class="bar-value">$1.74M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Toronto</div>
+                        <div class="bar-fill" style="width: 11.8%;"></div>
+                        <div class="bar-value">$1.69M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">AMAT</div>
+                        <div class="bar-fill" style="width: 10.1%;"></div>
+                        <div class="bar-value">$1.44M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Master Web</div>
+                        <div class="bar-fill" style="width: 8.9%;"></div>
+                        <div class="bar-value">$1.27M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Seattle</div>
+                        <div class="bar-fill" style="width: 8.6%;"></div>
+                        <div class="bar-value">$1.23M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Montreal</div>
+                        <div class="bar-fill" style="width: 7.9%;"></div>
+                        <div class="bar-value">$1.12M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Vancouver</div>
+                        <div class="bar-fill" style="width: 7.8%;"></div>
+                        <div class="bar-value">$1.11M</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Chicago</div>
+                        <div class="bar-fill" style="width: 5.4%;"></div>
+                        <div class="bar-value">$771K</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Mexico</div>
+                        <div class="bar-fill" style="width: 3.9%;"></div>
+                        <div class="bar-value">$551K</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Special</div>
+                        <div class="bar-fill" style="width: 2.4%;"></div>
+                        <div class="bar-value">$342K</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">E-Sonic Web</div>
+                        <div class="bar-fill" style="width: 1.0%;"></div>
+                        <div class="bar-value">$150K</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Top 15 Branches</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="rank">Rank</th>
+                                <th>Branch</th>
+                                <th class="amount">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="rank">1</td>
+                                <td class="branch-name">OLC</td>
+                                <td class="amount">$14.28M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">2</td>
+                                <td class="branch-name">Santa Monica</td>
+                                <td class="amount">$5.66M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">3</td>
+                                <td class="branch-name">Minneapolis</td>
+                                <td class="amount">$5.24M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">4</td>
+                                <td class="branch-name">Santa Clara</td>
+                                <td class="amount">$3.69M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">5</td>
+                                <td class="branch-name">Long Island</td>
+                                <td class="amount">$3.57M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">6</td>
+                                <td class="branch-name">Malaysia</td>
+                                <td class="amount">$3.51M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">7</td>
+                                <td class="branch-name">Tampa</td>
+                                <td class="amount">$3.24M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">8</td>
+                                <td class="branch-name">Hong Kong</td>
+                                <td class="amount">$2.79M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">9</td>
+                                <td class="branch-name">Milwaukee</td>
+                                <td class="amount">$2.63M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">10</td>
+                                <td class="branch-name">Miami</td>
+                                <td class="amount">$2.22M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">11</td>
+                                <td class="branch-name">Phoenix</td>
+                                <td class="amount">$1.74M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">12</td>
+                                <td class="branch-name">Toronto</td>
+                                <td class="amount">$1.69M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">13</td>
+                                <td class="branch-name">AMAT</td>
+                                <td class="amount">$1.44M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">14</td>
+                                <td class="branch-name">Master Web Orders</td>
+                                <td class="amount">$1.27M</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">15</td>
+                                <td class="branch-name">Seattle</td>
+                                <td class="amount">$1.23M</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Top 15 by GP%</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="rank">Rank</th>
+                                <th>Branch</th>
+                                <th class="gp-pct">GP%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="rank">1</td>
+                                <td class="branch-name">E-Sonic Web Orders</td>
+                                <td class="gp-pct">42.8%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">2</td>
+                                <td class="branch-name">Master Web Orders</td>
+                                <td class="gp-pct">38.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">3</td>
+                                <td class="branch-name">OLC</td>
+                                <td class="gp-pct">36.5%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">4</td>
+                                <td class="branch-name">Miami</td>
+                                <td class="gp-pct">34.6%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">5</td>
+                                <td class="branch-name">Vancouver</td>
+                                <td class="gp-pct">33.7%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">6</td>
+                                <td class="branch-name">Montreal</td>
+                                <td class="gp-pct">32.9%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">7</td>
+                                <td class="branch-name">Toronto</td>
+                                <td class="gp-pct">32.4%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">8</td>
+                                <td class="branch-name">Chicago</td>
+                                <td class="gp-pct">31.4%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">9</td>
+                                <td class="branch-name">Seattle</td>
+                                <td class="gp-pct">31.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">10</td>
+                                <td class="branch-name">Hong Kong</td>
+                                <td class="gp-pct">30.8%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">11</td>
+                                <td class="branch-name">Phoenix</td>
+                                <td class="gp-pct">29.6%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">12</td>
+                                <td class="branch-name">Malaysia</td>
+                                <td class="gp-pct">29.2%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">13</td>
+                                <td class="branch-name">Santa Monica</td>
+                                <td class="gp-pct">28.8%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">14</td>
+                                <td class="branch-name">Long Island</td>
+                                <td class="gp-pct">28.7%</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">15</td>
+                                <td class="branch-name">Santa Clara</td>
+                                <td class="gp-pct">28.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Last updated: 2:15 PM | Data through May 27, 2026 (18 working days)</p>
+        </div>
+    </div>
+</body>
+</html>
